@@ -80,6 +80,4 @@ btn_entropy.grid(row=2,column=0,pady=15)
 btn_hasil = Button(frame2, text="Lihat Persentase Hasil Perbandingan",padx=19,pady=10,command=lihatHasil)
 btn_hasil.grid(row=3,column=0,pady=15)
 
-btn_hasil2 = Button(frame2, text="Lihat Persentase Hasil Perbandingan",padx=19,pady=10,command=lihatHasil)
-btn_hasil2.grid(row=3,column=0,pady=15)
 root.mainloop()
