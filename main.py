@@ -64,6 +64,11 @@ def openBank():
     top.geometry("500x400")
     top.title("Bank Malware")
 
+    frameA = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameA.grid(row=0,column=0,padx=10)
+    btn_grayscaleA = Button(frameA, text="Grayscale")
+    btn_grayscaleA.pack()
+
 #button untuk upload file
 btn_upload = Button(frame, text="Upload File",command=upload)
 btn_upload.pack()
