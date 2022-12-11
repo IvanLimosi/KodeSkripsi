@@ -5,6 +5,8 @@ from tkinter import messagebox
 import numpy as np
 from math import sqrt, ceil
 import cv2
+import matplotlib.pyplot as plt
+from scipy.stats import entropy
 
 #variable untuk cek apakah file sudah diupload
 x=0
@@ -54,6 +56,18 @@ def convertToGrayscale():
 def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
+    else:
+        entropy_values = []
+        p = [data.count(b) / len(data) for b in set(data)]
+        # calculate the entropy of the binary data
+        e = entropy(p)
+    
+        # append the entropy value to the list
+        entropy_values.append(e)
+        plt.plot(entropy_values)
+        plt.show()
+
+    
 
 def lihatHasil():
     if x==0:
