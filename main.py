@@ -37,6 +37,7 @@ def upload():
             
     with open(root.filename, 'rb') as binary_file:
         data=binary_file.read()
+        data2 = bytearray(binary_file.read())
 
 def convertToGrayscale():
     if x==0:
@@ -67,17 +68,38 @@ def createEntropyGraph():
         # plt.plot(entropy_values)
         # plt.show()
         
-        #convert data menjadi sequence bits
-        bits = [bin(byte)[2:] for byte in data]
+        # #convert data menjadi sequence bits
+        # bits = [bin(byte)[2:] for byte in data]
 
-        #Hitung probabilitas setiap bitnya
-        prob = [bits.count(bit) / len(bits) for bit in set(bits)]
-        p = prob
-        #Hitung nilai entropi
-        entropi = -np.sum( p * np.log2(p))
-        
-        plt.plot(entropi)
+        # #Hitung probabilitas setiap bitnya
+        # prob = [bits.count(bit) / len(bits) for bit in set(bits)]
+        # p = prob
+        # #Hitung nilai entropi
+        # entropi = -np.sum( p * np.log2(p))
 
+        # plt.plot(entropi)
+
+        # plt.show
+
+        byte_freq = {}
+        for byte in data:
+            if byte in byte_freq:
+                byte_freq[byte] += 1
+            else:
+                byte_freq[byte] = 1
+
+        total_bytes = len(data)
+        probabilities = [byte_freq[byte] / total_bytes for byte in byte_freq]
+
+        entropy = -sum(p * np.log(p) for p in probabilities)
+
+        probabilities = np.reshape(probabilities, (-1, 1))
+        entropy = np.reshape(entropy, (-1, 1))
+
+        probabilities = np.squeeze(probabilities)
+        entropy = np.squeeze(entropy)
+
+        plt.plot(probabilities,entropy)
         plt.show
     
 
