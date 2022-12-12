@@ -57,16 +57,28 @@ def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
-        entropy_values = []
-        p = [data.count(b) / len(data) for b in set(data)]
-        # calculate the entropy of the binary data
-        e = entropy(p)
+        # entropy_values = []
+        # p = [data.count(b) / len(data) for b in set(data)]
+        # # calculate the entropy of the binary data
+        # e = entropy(p)
     
-        # append the entropy value to the list
-        entropy_values.append(e)
-        plt.plot(entropy_values)
-        plt.show()
+        # # append the entropy value to the list
+        # entropy_values.append(e)
+        # plt.plot(entropy_values)
+        # plt.show()
+        
+        #convert data menjadi sequence bits
+        bits = [bin(byte)[2:] for byte in data]
 
+        #Hitung probabilitas setiap bitnya
+        prob = [bits.count(bit) / len(bits) for bit in set(bits)]
+        p = prob
+        #Hitung nilai entropi
+        entropi = -np.sum( p * np.log2(p))
+        
+        plt.plot(entropi)
+
+        plt.show
     
 
 def lihatHasil():
