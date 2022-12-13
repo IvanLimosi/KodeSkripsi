@@ -6,7 +6,8 @@ import numpy as np
 from math import sqrt, ceil
 import cv2
 import matplotlib.pyplot as plt
-from scipy.stats import entropy
+from scipy import stats
+
 
 #variable untuk cek apakah file sudah diupload
 x=0
@@ -24,6 +25,7 @@ frame2.grid(row=0,column=1,padx=10)
 #upload file sekaligus convert ke bitmap images
 def upload():
     global data
+    global data2
     label = None
     global x
     root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("jpg files", "*.jpg"),("all files", "*.*")))
@@ -38,62 +40,71 @@ def upload():
     with open(root.filename, 'rb') as binary_file:
         data=binary_file.read()
         data2 = bytearray(binary_file.read())
+        
 
 def convertToGrayscale():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
-        data_len = len(data)
+        #ambil panjang data dalam bytes
+        len1 = len(data)
+        #buat vektor dari panjang data dalam bytes
         d = np.frombuffer(data, dtype=np.uint8)
-        sqrt_len = int(ceil(sqrt(data_len)))
-        new_len = sqrt_len*sqrt_len
-        pad_len = new_len - data_len
+        #Hitung akar kuadrat dari panjang data dan dibulatkan ke atas agar hasil dari gambar akan dekat dengan persegi
+        sqrt_len = int(ceil(sqrt(len1)))
+        #Panjang data baru
+        len2 = sqrt_len*sqrt_len
+        #jumlah bytes yang harus di tambahkan angka 0 agar dapat menjadi sama
+        pad_len = len2 - len1
         #tambah 0 di akhir
         padded_d = np.hstack((d,np.zeros(pad_len, np.uint8)))
+        #ubah data menjadi array 2 dimensi
         im = np.reshape(padded_d,(sqrt_len, sqrt_len))
+        #simpan gambar menjadi im.png
         cv2.imwrite('im.png',im)
+        #tampilkan gambar di perangkat lunak
         label2 = Label(image=cv2.imshow('im',im)).grid(row = 3, column=0)
 
 def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
-        # entropy_values = []
-        # p = [data.count(b) / len(data) for b in set(data)]
-        # # calculate the entropy of the binary data
-        # e = entropy(p)
-    
-        # # append the entropy value to the list
-        # entropy_values.append(e)
-        # plt.plot(entropy_values)
+        # convert grayscale image jadi bitmap img
+        bitmap = Image.open('im.png')
+        bitmap = bitmap.convert('1')
+        # ambil data panjang dan lebar
+        width,height = bitmap.size
+        # byte_freq = {}
+        # for byte in data:
+        #     if byte in byte_freq:
+        #         byte_freq[byte] += 1
+        #     else:
+        #         byte_freq[byte] = 1
+
+        # total_bytes = len(data)
+        # probabilities = [byte_freq[byte] / total_bytes for byte in byte_freq]
+
+        # entropy = -sum(p * np.log(p) for p in probabilities)
+
+        # plt.plot(entropy,'ro')
         # plt.show()
-        
-        # #convert data menjadi sequence bits
-        # bits = [bin(byte)[2:] for byte in data]
-
-        # #Hitung probabilitas setiap bitnya
-        # prob = [bits.count(bit) / len(bits) for bit in set(bits)]
-        # p = prob
-        # #Hitung nilai entropi
-        # entropi = -np.sum( p * np.log2(p))
-
-        # plt.plot(entropi)
-
-        # plt.show
-
-        byte_freq = {}
-        for byte in data:
-            if byte in byte_freq:
-                byte_freq[byte] += 1
-            else:
-                byte_freq[byte] = 1
-
-        total_bytes = len(data)
-        probabilities = [byte_freq[byte] / total_bytes for byte in byte_freq]
-
-        entropy = -sum(p * np.log(p) for p in probabilities)
-
-        print(entropy)
+        tempEntropi = []
+        tempHeight = []
+        for i in range(bitmap.height):
+            #ambil tiap baris dari data bitmap
+            baris = bitmap.crop((0,i,width,i+1))
+            z = baris.getdata()
+            # hitung entropy dari tiap baris di data bitmap
+            entropi = stats.entropy(z)
+            tempEntropi.append(entropi)
+            tempHeight.append(i)
+            # print(entropi)
+            # print(type(i))
+            # print(type(entropi))
+        # plot di entropy graph
+        plt.plot(tempHeight,tempEntropi,marker=".")
+        plt.show()
+        # print(width,height)
     
 
 def lihatHasil():
