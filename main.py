@@ -93,14 +93,7 @@ def createEntropyGraph():
 
         entropy = -sum(p * np.log(p) for p in probabilities)
 
-        probabilities = np.reshape(probabilities, (-1, 1))
-        entropy = np.reshape(entropy, (-1, 1))
-
-        probabilities = np.squeeze(probabilities)
-        entropy = np.squeeze(entropy)
-
-        plt.plot(probabilities,entropy)
-        plt.show
+        print(entropy)
     
 
 def lihatHasil():
