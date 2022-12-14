@@ -14,6 +14,7 @@ x=0
 
 root = Tk()
 root.geometry("650x400")
+root.title("Aplikasi Pengecekan Kemiripan Malware")
 
 
 frame = LabelFrame(root, text="Upload File", padx=150,pady=150)
@@ -88,6 +89,7 @@ def createEntropyGraph():
 
         # plt.plot(entropy,'ro')
         # plt.show()
+        global tempEntropi,tempHeight
         tempEntropi = []
         tempHeight = []
         for i in range(bitmap.height):
@@ -102,7 +104,7 @@ def createEntropyGraph():
             # print(type(i))
             # print(type(entropi))
         # plot di entropy graph
-        plt.plot(tempHeight,tempEntropi,marker=".")
+        plt.plot(tempHeight,tempEntropi,marker="+")
         plt.show()
         # print(width,height)
     
@@ -110,6 +112,30 @@ def createEntropyGraph():
 def lihatHasil():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
+    else:
+        top2 = Toplevel()
+        top2.geometry("200x300")
+        top2.title("Hasil Similarity")
+        bitmap = Image.open('im2.png')
+        bitmap = bitmap.convert('1')
+        # ambil data panjang dan lebar
+        width,height = bitmap.size
+        tempEntropi2 = []
+        tempHeight2 = []
+        for i in range(height):
+            #ambil tiap baris dari data bitmap
+            baris = bitmap.crop((0,i,width,i+1))
+            z = baris.getdata()
+            # hitung entropy dari tiap baris di data bitmap
+            entropi = stats.entropy(z)
+            tempEntropi2.append(entropi)
+            tempHeight2.append(i)
+        
+        for i,j in zip(tempEntropi,tempEntropi2):
+            hasil = abs(i-j)
+            hasil2 = 1/(1+hasil)
+        print(hasil2)
+        
 
 def openBank():
     top = Toplevel()
@@ -120,7 +146,7 @@ def openBank():
     frameA.grid(row=0,column=0,padx=10, pady=10)
     btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13)
     btn_grayscaleA.pack()
-    btn_entropyA = Button(frameA, text="Entropy Graph" )
+    btn_entropyA = Button(frameA, text="Entropy Graph")
     btn_entropyA.pack()
 
     frameB = LabelFrame(top, text="Cerber", padx=10,pady=10)
@@ -163,12 +189,15 @@ def openBank():
 btn_upload = Button(frame, text="Upload File",command=upload)
 btn_upload.pack()
 
+#button untuk buka bank malware
 btn_bank = Button(frame2, text="Bank Malware",padx=75,pady=10,command=openBank)
 btn_bank.grid(row=0,column=0,pady=15)
 
+#button untuk mengkonversi menjadi grayscale image
 btn_grayscale = Button(frame2, text="Converts To Grayscale",command=convertToGrayscale,padx=55,pady=10)
 btn_grayscale.grid(row=1,column=0,pady=15)
 
+#button untuk membuat entropy graph
 btn_entropy = Button(frame2, text="Create Entropy Graphs",padx=55,pady=10,command=createEntropyGraph)
 btn_entropy.grid(row=2,column=0,pady=15)
 
