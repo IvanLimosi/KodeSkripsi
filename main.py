@@ -116,6 +116,7 @@ def lihatHasil():
         top2 = Toplevel()
         top2.geometry("200x300")
         top2.title("Hasil Similarity")
+        #nanti bikin bitmap banyak untuk tiap malware yang ada dibank malware. dibuat juga buat entropy sama grayscale masing-masing
         bitmap = Image.open('im2.png')
         bitmap = bitmap.convert('1')
         # ambil data panjang dan lebar
