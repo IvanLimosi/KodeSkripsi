@@ -55,7 +55,7 @@ def convertToGrayscale():
         sqrt_len = int(ceil(sqrt(len1)))
         #Panjang data baru
         len2 = sqrt_len*sqrt_len
-        #jumlah bytes yang harus di tambahkan angka 0 agar dapat menjadi sama
+        #jumlah sisa bytes yang harus di tambahkan angka 0 agar dapat menjadi sama
         pad_len = len2 - len1
         #tambah 0 di akhir
         padded_d = np.hstack((d,np.zeros(pad_len, np.uint8)))
@@ -72,7 +72,8 @@ def createEntropyGraph():
     else:
         # convert grayscale image jadi bitmap img
         bitmap = Image.open('im.png')
-        bitmap = bitmap.convert('1')
+        # bitmap = bitmap.convert('L')
+        z = list(bitmap.getdata())
         # ambil data panjang dan lebar
         width,height = bitmap.size
         # byte_freq = {}
@@ -94,10 +95,17 @@ def createEntropyGraph():
         tempHeight = []
         for i in range(bitmap.height):
             #ambil tiap baris dari data bitmap
-            baris = bitmap.crop((0,i,width,i+1))
-            z = baris.getdata()
+            baris = z[i * bitmap.width:(i + 1) * bitmap.width]
+
+            # print(width)
+            # print(i)
+            # print(baris)
+            # print(len(baris))
+            # break
+            # z = baris.getdata()
+
             # hitung entropy dari tiap baris di data bitmap
-            entropi = stats.entropy(z)
+            entropi = stats.entropy(baris)
             tempEntropi.append(entropi)
             tempHeight.append(i)
             # print(entropi)
@@ -117,24 +125,28 @@ def lihatHasil():
         top2.geometry("200x300")
         top2.title("Hasil Similarity")
         #nanti bikin bitmap banyak untuk tiap malware yang ada dibank malware. dibuat juga buat entropy sama grayscale masing-masing
-        bitmap = Image.open('im2.png')
-        bitmap = bitmap.convert('1')
+        bitmap2 = Image.open('im2.png')
+        z2 = list(bitmap2.getdata())
+        # bitmap2 = bitmap2.convert('1')
         # ambil data panjang dan lebar
-        width,height = bitmap.size
+        width,height = bitmap2.size
         tempEntropi2 = []
+        hasil = 0
         tempHeight2 = []
-        for i in range(height):
+        for i2 in range(bitmap2.height):
             #ambil tiap baris dari data bitmap
-            baris = bitmap.crop((0,i,width,i+1))
-            z = baris.getdata()
+            baris2 = z2[i2 * bitmap2.width:(i2 + 1) * bitmap2.width]
+            
             # hitung entropy dari tiap baris di data bitmap
-            entropi = stats.entropy(z)
-            tempEntropi2.append(entropi)
-            tempHeight2.append(i)
+            entropi2 = stats.entropy(baris2)
+            tempEntropi2.append(entropi2)
+            tempHeight2.append(i2)
         
         for i,j in zip(tempEntropi,tempEntropi2):
-            hasil = abs(i-j)
-            hasil2 = 1/(1+hasil)
+            hasil = hasil + abs(i-j)
+            # print(hasil)
+
+        hasil2 = 1/(1+hasil) * 100
         print(hasil2)
         
 
