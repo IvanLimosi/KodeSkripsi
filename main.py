@@ -3,7 +3,7 @@ from PIL import ImageTk,Image
 from tkinter import filedialog
 from tkinter import messagebox
 import numpy as np
-from math import sqrt, ceil
+from math import sqrt, ceil, pow
 import cv2
 import matplotlib.pyplot as plt
 from scipy import stats
@@ -11,6 +11,8 @@ from scipy import stats
 
 #variable untuk cek apakah file sudah diupload
 x=0
+
+# np.seterr(divide='ignore', invalid='ignore')
 
 root = Tk()
 root.geometry("650x400")
@@ -26,7 +28,7 @@ frame2.grid(row=0,column=1,padx=10)
 #upload file sekaligus convert ke bitmap images
 def upload():
     global data
-    global data2
+    # global data2
     label = None
     global x
     root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("jpg files", "*.jpg"),("all files", "*.*")))
@@ -40,7 +42,7 @@ def upload():
             
     with open(root.filename, 'rb') as binary_file:
         data=binary_file.read()
-        data2 = bytearray(binary_file.read())
+        # data2 = bytearray(binary_file.read())
         
 
 def convertToGrayscale():
@@ -73,9 +75,9 @@ def createEntropyGraph():
         # convert grayscale image jadi bitmap img
         bitmap = Image.open('im.png')
         # bitmap = bitmap.convert('L')
+        # bitmap.save("im.bmp")
         z = list(bitmap.getdata())
-        # ambil data panjang dan lebar
-        width,height = bitmap.size
+        
         # byte_freq = {}
         # for byte in data:
         #     if byte in byte_freq:
@@ -116,6 +118,14 @@ def createEntropyGraph():
         plt.show()
         # print(width,height)
     
+def cosine_similarity(list1, list2):
+    dot_product = sum(a * b for a, b in zip(list1, list2))
+    norm_list1 = sqrt(sum(a ** 2 for a in list1))
+    norm_list2 = sqrt(sum(b ** 2 for b in list2))
+    return dot_product / (norm_list1 * norm_list2)
+
+# def filter_small_values(x):
+#     return x > 1e-10
 
 def lihatHasil():
     if x==0:
@@ -128,26 +138,33 @@ def lihatHasil():
         bitmap2 = Image.open('im2.png')
         z2 = list(bitmap2.getdata())
         # bitmap2 = bitmap2.convert('1')
-        # ambil data panjang dan lebar
-        width,height = bitmap2.size
+        global tempEntropi2
         tempEntropi2 = []
-        hasil = 0
         tempHeight2 = []
         for i2 in range(bitmap2.height):
             #ambil tiap baris dari data bitmap
             baris2 = z2[i2 * bitmap2.width:(i2 + 1) * bitmap2.width]
-            
             # hitung entropy dari tiap baris di data bitmap
             entropi2 = stats.entropy(baris2)
             tempEntropi2.append(entropi2)
+            # print(entropi2)
             tempHeight2.append(i2)
         
-        for i,j in zip(tempEntropi,tempEntropi2):
-            hasil = hasil + abs(i-j)
-            # print(hasil)
 
-        hasil2 = 1/(1+hasil) * 100
-        print(hasil2)
+        # entropi1 = [x ** 2 for x in tempEntropi]
+        # entropi2 = [x ** 2 for x in tempEntropi2]
+
+
+        # hasilSimilarity =100 * (1 - (hitungEuclidean(tempEntropi,tempEntropi2) / (sqrt(sum(entropi1)) * sqrt(sum(entropi2)))))
+        # print(hitungEuclidean(tempEntropi,tempEntropi2))
+        # filteredEntropi = filter(filter_small_values, tempEntropi)
+        # filteredEntropi2 = filter(filter_small_values, tempEntropi2)
+        hasilSimilarity = cosine_similarity(tempEntropi,tempEntropi2)*100
+        # print(sqrt(sum(entropi1)))
+        # print(sqrt(sum(entropi2)))
+        print(f"{hasilSimilarity:.2f}")
+        # print(maxDistance)
+
         
 
 def openBank():
