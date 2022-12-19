@@ -3,7 +3,7 @@ from PIL import ImageTk,Image
 from tkinter import filedialog
 from tkinter import messagebox
 import numpy as np
-from math import sqrt, ceil, pow
+from math import sqrt, ceil
 import cv2
 import matplotlib.pyplot as plt
 from scipy import stats
@@ -66,15 +66,16 @@ def convertToGrayscale():
         #simpan gambar menjadi im.png
         cv2.imwrite('im.png',im)
         #tampilkan gambar di perangkat lunak
-        label2 = Label(image=cv2.imshow('im',im)).grid(row = 3, column=0)
-
+        label2 = Label(image=cv2.imshow('im',im))
+        label2.grid(row = 3, column=0)
+        
 def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
         # convert grayscale image jadi bitmap img
         bitmap = Image.open('im.png')
-        # bitmap = bitmap.convert('L')
+        bitmap = bitmap.convert('L')
         # bitmap.save("im.bmp")
         z = list(bitmap.getdata())
         
@@ -137,7 +138,7 @@ def lihatHasil():
         #nanti bikin bitmap banyak untuk tiap malware yang ada dibank malware. dibuat juga buat entropy sama grayscale masing-masing
         bitmap2 = Image.open('im2.png')
         z2 = list(bitmap2.getdata())
-        # bitmap2 = bitmap2.convert('1')
+        bitmap2 = bitmap2.convert('L')
         global tempEntropi2
         tempEntropi2 = []
         tempHeight2 = []
