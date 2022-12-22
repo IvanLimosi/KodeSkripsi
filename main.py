@@ -61,7 +61,6 @@ def createEntropyGraph():
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
         global tempEntropi,tempHeight
-
         bitmap = Image.open('im.png')
         bitmap = bitmap.convert('L')
         z = list(bitmap.getdata())
