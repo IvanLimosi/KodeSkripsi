@@ -35,7 +35,7 @@ def upload():
     x = 1
     while label is None:
         if label is None:
-            label = Label(root, text=root.filename).grid(row=2,column=0)
+            # label = Label(root, text=root.filename).grid(row=2,column=0)
             break
         else:
             label.grid_forget()
@@ -136,7 +136,7 @@ def lihatHasil():
         top2.geometry("200x300")
         top2.title("Hasil Similarity")
         #nanti bikin bitmap banyak untuk tiap malware yang ada dibank malware. dibuat juga buat entropy sama grayscale masing-masing
-        bitmap2 = Image.open('im2.png')
+        bitmap2 = Image.open('WannaCryPlus.png')
         z2 = list(bitmap2.getdata())
         bitmap2 = bitmap2.convert('L')
         global tempEntropi2
