@@ -60,21 +60,22 @@ def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
-        global tempEntropi,tempHeight
+        global listEntropi,tempHeight
         bitmap = Image.open('im.png')
         bitmap = bitmap.convert('L')
         z = list(bitmap.getdata())
         
-        tempEntropi = []
+        listEntropi = []
         tempHeight = []
         for i in range(bitmap.height):
 
             baris = z[i * bitmap.width:(i + 1) * bitmap.width]
-            entropi = stats.entropy(baris)
-            tempEntropi.append(entropi)
-            tempHeight.append(i)
+            if baris!=0:
+                entropi = stats.entropy(baris)
+                listEntropi.append(entropi)
+                tempHeight.append(i)
 
-        plt.plot(tempHeight,tempEntropi,marker="+")
+        plt.plot(tempHeight,listEntropi,marker="+")
         plt.show()
 
     
@@ -92,26 +93,260 @@ def lihatHasil():
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
         top2 = Toplevel()
-        top2.geometry("200x300")
+        top2.geometry("300x500")
         top2.title("Hasil Similarity")
         #nanti bikin bitmap banyak untuk tiap malware yang ada dibank malware. dibuat juga buat entropy sama grayscale masing-masing
-        bitmap2 = Image.open('WannaCryPlus.png')
-        z2 = list(bitmap2.getdata())
-        bitmap2 = bitmap2.convert('L')
-        global tempEntropi2
+        image1 = Image.open('Cryptowall.png')
+        image2 = Image.open('Mamba.png')
+        image3 = Image.open('RedBoot.png')
+        image4 = Image.open('Rex.png')
+        image5 = Image.open('WannaCry.png')
+        image6 = Image.open('WannaCryPlus.png')
+        data1 = list(image1.getdata())
+        data2 = list(image2.getdata())
+        data3 = list(image3.getdata())
+        data4 = list(image4.getdata())
+        data5 = list(image5.getdata())
+        data6 = list(image6.getdata())
+        image1 = image1.convert('L')
+        image2 = image2.convert('L')
+        image3 = image3.convert('L')
+        image4 = image4.convert('L')
+        image5 = image5.convert('L')
+        image6 = image6.convert('L')
+        tempEntropi1 = []
         tempEntropi2 = []
-        tempHeight2 = []
-        for i2 in range(bitmap2.height):
+        tempEntropi3 = []
+        tempEntropi4 = []
+        tempEntropi5 = []
+        tempEntropi6 = []
+        # tempHeight2 = []
+        for i in range(image1.height):
+            baris1 = data1[i * image1.width:(i + 1) * image1.width]
+            if baris1!=0:
+                entropi1 = stats.entropy(baris1)
+                tempEntropi1.append(entropi1)
+                # tempHeight2.append(i)
 
-            baris2 = z2[i2 * bitmap2.width:(i2 + 1) * bitmap2.width]
+        for i in range(image2.height):
+            baris2 = data2[i * image2.width:(i + 1) * image2.width]
             if baris2!=0:
                 entropi2 = stats.entropy(baris2)
                 tempEntropi2.append(entropi2)
-                tempHeight2.append(i2)
+                # tempHeight2.append(i)
 
-        hasilSimilarity = cosineSimilarity(tempEntropi,tempEntropi2)*100
-        print(f"{hasilSimilarity:.2f}")
-  
+        for i in range(image3.height):
+            baris3 = data3[i * image3.width:(i + 1) * image3.width]
+            if baris3!=0:
+                entropi3 = stats.entropy(baris3)
+                tempEntropi3.append(entropi3)
+                # tempHeight2.append(i)
+                
+        for i in range(image4.height):
+            baris4 = data4[i * image4.width:(i + 1) * image4.width]
+            if baris4!=0:
+                entropi4 = stats.entropy(baris4)
+                tempEntropi4.append(entropi4)
+                # tempHeight2.append(i)
+
+        for i in range(image5.height):
+            baris5 = data5[i * image5.width:(i + 1) * image5.width]
+            if baris5!=0:
+                entropi5 = stats.entropy(baris5)
+                tempEntropi5.append(entropi5)
+                # tempHeight2.append(i)
+
+        for i in range(image6.height):
+            baris6 = data6[i * image6.width:(i + 1) * image6.width]
+            if baris6!=0:
+                entropi6 = stats.entropy(baris6)
+                tempEntropi6.append(entropi6)
+                # tempHeight2.append(i)
+
+        hasilSimilarity1 = cosineSimilarity(listEntropi,tempEntropi1)*100
+        hasilSimilarity2 = cosineSimilarity(listEntropi,tempEntropi2)*100
+        hasilSimilarity3 = cosineSimilarity(listEntropi,tempEntropi3)*100
+        hasilSimilarity4 = cosineSimilarity(listEntropi,tempEntropi4)*100
+        hasilSimilarity5 = cosineSimilarity(listEntropi,tempEntropi5)*100
+        hasilSimilarity6 = cosineSimilarity(listEntropi,tempEntropi6)*100
+        # print(f"{hasilSimilarity:.2f}")
+
+        frame1 = LabelFrame(top2,text="Cryptowall",padx=10)
+        frame1.grid(column=0,row=0)
+        frame2 = LabelFrame(top2,text="Mamba",padx=10)
+        frame2.grid(column=0,row=1)
+        frame3 = LabelFrame(top2,text="RedBoot",padx=10)
+        frame3.grid(column=0,row=2)
+        frame4 = LabelFrame(top2,text="Rex",padx=10)
+        frame4.grid(column=0,row=3)
+        frame5 = LabelFrame(top2,text="WannaCry",padx=10)
+        frame5.grid(column=0,row=4)
+        frame6 = LabelFrame(top2,text="WannaCry+",padx=10)
+        frame6.grid(column=0,row=5)
+
+        Hasil1 = Label(frame1,text=hasilSimilarity1)
+        Hasil1.grid(column=0,row=0)
+        Hasil1.config(text="{:.2f}%".format(hasilSimilarity1))
+
+        Hasil2 = Label(frame2,text=hasilSimilarity2)
+        Hasil2.grid(column=0,row=1)
+        Hasil2.config(text="{:.2f}%".format(hasilSimilarity2))
+
+        Hasil3 = Label(frame3,text=hasilSimilarity3)
+        Hasil3.grid(column=0,row=2)
+        Hasil3.config(text="{:.2f}%".format(hasilSimilarity3))
+
+        Hasil4 = Label(frame4,text=hasilSimilarity4)
+        Hasil4.grid(column=0,row=3)
+        Hasil4.config(text="{:.2f}%".format(hasilSimilarity4))
+
+        Hasil5 = Label(frame5,text=hasilSimilarity5)
+        Hasil5.grid(column=0,row=4)
+        Hasil5.config(text="{:.2f}%".format(hasilSimilarity5))
+
+        Hasil6 = Label(frame6,text=hasilSimilarity6)
+        Hasil6.grid(column=0,row=5)
+        Hasil6.config(text="{:.2f}%".format(hasilSimilarity6))
+
+        # frame1.config(text="{:.1f}%".format(hasilSimilarity1))
+def grayscaleBankCryptowall():
+    image = cv2.imread('Cryptowall.png')
+    window_name = 'Grayscale Image Cryptowall'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def grayscaleBankMamba():
+    image = cv2.imread('Mamba.png')
+    window_name = 'Grayscale Image Mamba'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def grayscaleBankRedBoot():
+    image = cv2.imread('RedBoot.png')
+    window_name = 'Grayscale Image RedBoot'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def grayscaleBankRex():
+    image = cv2.imread('Rex.png')
+    window_name = 'Grayscale Image Rex'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def grayscaleBankWannaCry():
+    image = cv2.imread('WannaCry.png')
+    window_name = 'Grayscale Image WannaCry'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def grayscaleBankWannaCryPlus():
+    image = cv2.imread('WannaCryPlus.png')
+    window_name = 'Grayscale Image WannaCryPlus'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
+
+def entropyBankCryptowall():
+    gambar = Image.open('Cryptowall.png')
+    array = list(gambar.getdata())
+    gambar = gambar.convert('L')
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
+
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
+
+def entropyBankMamba():
+    gambar = Image.open('Mamba.png')
+    array = list(gambar.getdata())
+    gambar = gambar.convert('L')
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
+
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
+
+def entropyBankRedBoot():
+    gambar = Image.open('RedBoot.png')
+    array = list(gambar.getdata())
+    gambar = gambar.convert('L')
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
+
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
+
+def entropyBankRex():
+    gambar = Image.open('Rex.png')
+    array = list(gambar.getdata())
+    gambar = gambar.convert('L')
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
+
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
+
+def entropyBankWannaCry():
+    gambar = Image.open('WannaCry.png')
+    array = list(gambar.getdata())
+    gambar = gambar.convert('L')
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
+
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
+
+def entropyBankWannaCryPlus():
+    gambar = Image.open('WannaCryPlus.png')
+    array = list(gambar.getdata())
+    gambar = gambar.convert('L')
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
+
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
+
 
         
 
@@ -120,46 +355,46 @@ def openBank():
     top.geometry("500x400")
     top.title("Bank Malware")
 
-    frameA = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameA = LabelFrame(top, text="Cryptowall", padx=10,pady=10)
     frameA.grid(row=0,column=0,padx=10, pady=10)
-    btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13)
+    btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13,command=grayscaleBankCryptowall)
     btn_grayscaleA.pack()
-    btn_entropyA = Button(frameA, text="Entropy Graph")
+    btn_entropyA = Button(frameA, text="Entropy Graph",command=entropyBankCryptowall)
     btn_entropyA.pack()
 
-    frameB = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameB = LabelFrame(top, text="Mamba", padx=10,pady=10)
     frameB.grid(row=0,column=1,padx=10, pady=10)
-    btn_grayscaleB = Button(frameB, text="Grayscale", padx= 13)
+    btn_grayscaleB = Button(frameB, text="Grayscale", padx= 13,command=grayscaleBankMamba)
     btn_grayscaleB.pack()
-    btn_entropyB = Button(frameB, text="Entropy Graph" )
+    btn_entropyB = Button(frameB, text="Entropy Graph" ,command=entropyBankMamba)
     btn_entropyB.pack()
 
-    frameC = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameC = LabelFrame(top, text="RedBoot", padx=10,pady=10)
     frameC.grid(row=0,column=2,padx=10, pady=10)
-    btn_grayscaleC = Button(frameC, text="Grayscale", padx= 13)
+    btn_grayscaleC = Button(frameC, text="Grayscale", padx= 13,command=grayscaleBankRedBoot)
     btn_grayscaleC.pack()
-    btn_entropyC = Button(frameC, text="Entropy Graph" )
+    btn_entropyC = Button(frameC, text="Entropy Graph",command=entropyBankRedBoot )
     btn_entropyC.pack()
 
-    frameD = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameD = LabelFrame(top, text="Rex", padx=10,pady=10)
     frameD.grid(row=1,column=0,padx=10, pady=10)
-    btn_grayscaleD = Button(frameD, text="Grayscale", padx= 13)
+    btn_grayscaleD = Button(frameD, text="Grayscale", padx= 13,command=grayscaleBankRex)
     btn_grayscaleD.pack()
-    btn_entropyD = Button(frameD, text="Entropy Graph" )
+    btn_entropyD = Button(frameD, text="Entropy Graph" ,command=entropyBankRex)
     btn_entropyD.pack()
 
-    frameE = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameE = LabelFrame(top, text="WannaCry", padx=10,pady=10)
     frameE.grid(row=1,column=1,padx=10, pady=10)
-    btn_grayscaleE = Button(frameE, text="Grayscale", padx= 13)
+    btn_grayscaleE = Button(frameE, text="Grayscale", padx= 13,command=grayscaleBankWannaCry)
     btn_grayscaleE.pack()
-    btn_entropyE = Button(frameE, text="Entropy Graph" )
+    btn_entropyE = Button(frameE, text="Entropy Graph" ,command=entropyBankWannaCry)
     btn_entropyE.pack()
 
-    frameF = LabelFrame(top, text="Cerber", padx=10,pady=10)
+    frameF = LabelFrame(top, text="WannaCryPlus", padx=10,pady=10)
     frameF.grid(row=1,column=2,padx=10, pady=10)
-    btn_grayscaleF = Button(frameF, text="Grayscale", padx= 13)
+    btn_grayscaleF = Button(frameF, text="Grayscale", padx= 13,command=grayscaleBankWannaCryPlus)
     btn_grayscaleF.pack()
-    btn_entropyF = Button(frameF, text="Entropy Graph" )
+    btn_entropyF = Button(frameF, text="Entropy Graph" ,command=entropyBankWannaCryPlus)
     btn_entropyF.pack()
 
 root = Tk()
