@@ -9,41 +9,28 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 
-#variable untuk cek apakah file sudah diupload
+#Inisialisasi variabel
 x=0
-y=0
-# np.seterr(divide='ignore', invalid='ignore')
-
-root = Tk()
-root.geometry("650x400")
-root.title("Aplikasi Pengecekan Kemiripan Malware")
-
-
-frame = LabelFrame(root, text="Upload File", padx=150,pady=150)
-frame.grid(row=0,column=0,padx=10)
-frame2 = LabelFrame(root, text="Menu",pady=15)
-frame2.grid(row=0,column=1,padx=10)
+label = None
 
 
 #upload file sekaligus convert ke bitmap images
 def upload():
-    # global data2
     global x
     global data
-    label = None
+    global label
+
+    if label is not None:
+        label.grid_forget()
+
     root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("jpg files", "*.jpg"),("all files", "*.*")))
     x = 1
-    while label is None:
-        if label is None:
-            # label = Label(root, text=root.filename).grid(row=2,column=0)
-            break
-        else:
-            label.grid_forget()
-            
+
+    label = Label(root, text=root.filename)
+    label.grid(row=2, column=0)
+
     with open(root.filename, 'rb') as binary_file:
         data=binary_file.read()
-        # data2 = bytearray(binary_file.read())
-        
 
 def convertToGrayscale():
     if x==0:
@@ -73,23 +60,20 @@ def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
+        global tempEntropi,tempHeight
 
         bitmap = Image.open('im.png')
-
         bitmap = bitmap.convert('L')
-
         z = list(bitmap.getdata())
         
-        global tempEntropi,tempHeight
         tempEntropi = []
         tempHeight = []
         for i in range(bitmap.height):
 
             baris = z[i * bitmap.width:(i + 1) * bitmap.width]
-            if baris!=0:
-                entropi = stats.entropy(baris)
-                tempEntropi.append(entropi)
-                tempHeight.append(i)
+            entropi = stats.entropy(baris)
+            tempEntropi.append(entropi)
+            tempHeight.append(i)
 
         plt.plot(tempHeight,tempEntropi,marker="+")
         plt.show()
@@ -179,6 +163,15 @@ def openBank():
     btn_entropyF = Button(frameF, text="Entropy Graph" )
     btn_entropyF.pack()
 
+root = Tk()
+root.geometry("650x400")
+root.title("Aplikasi Pengecekan Kemiripan Malware")
+
+
+frame = LabelFrame(root, text="Upload File", padx=150,pady=150)
+frame.grid(row=0,column=0,padx=10)
+frame2 = LabelFrame(root, text="Menu",pady=15)
+frame2.grid(row=0,column=1,padx=10)
 
 #button untuk upload file
 btn_upload = Button(frame, text="Upload File",command=upload)
