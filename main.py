@@ -11,7 +11,7 @@ from scipy import stats
 
 #variable untuk cek apakah file sudah diupload
 x=0
-
+y=0
 # np.seterr(divide='ignore', invalid='ignore')
 
 root = Tk()
@@ -27,10 +27,10 @@ frame2.grid(row=0,column=1,padx=10)
 
 #upload file sekaligus convert ke bitmap images
 def upload():
-    global data
     # global data2
-    label = None
     global x
+    global data
+    label = None
     root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("jpg files", "*.jpg"),("all files", "*.*")))
     x = 1
     while label is None:
@@ -73,53 +73,29 @@ def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
-        # convert grayscale image jadi bitmap img
+
         bitmap = Image.open('im.png')
+
         bitmap = bitmap.convert('L')
-        # bitmap.save("im.bmp")
+
         z = list(bitmap.getdata())
         
-        # byte_freq = {}
-        # for byte in data:
-        #     if byte in byte_freq:
-        #         byte_freq[byte] += 1
-        #     else:
-        #         byte_freq[byte] = 1
-
-        # total_bytes = len(data)
-        # probabilities = [byte_freq[byte] / total_bytes for byte in byte_freq]
-
-        # entropy = -sum(p * np.log(p) for p in probabilities)
-
-        # plt.plot(entropy,'ro')
-        # plt.show()
         global tempEntropi,tempHeight
         tempEntropi = []
         tempHeight = []
         for i in range(bitmap.height):
-            #ambil tiap baris dari data bitmap
+
             baris = z[i * bitmap.width:(i + 1) * bitmap.width]
+            if baris!=0:
+                entropi = stats.entropy(baris)
+                tempEntropi.append(entropi)
+                tempHeight.append(i)
 
-            # print(width)
-            # print(i)
-            # print(baris)
-            # print(len(baris))
-            # break
-            # z = baris.getdata()
-
-            # hitung entropy dari tiap baris di data bitmap
-            entropi = stats.entropy(baris)
-            tempEntropi.append(entropi)
-            tempHeight.append(i)
-            # print(entropi)
-            # print(type(i))
-            # print(type(entropi))
-        # plot di entropy graph
         plt.plot(tempHeight,tempEntropi,marker="+")
         plt.show()
-        # print(width,height)
+
     
-def cosine_similarity(list1, list2):
+def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
     norm_list1 = sqrt(sum(a ** 2 for a in list1))
     norm_list2 = sqrt(sum(b ** 2 for b in list2))
@@ -143,28 +119,16 @@ def lihatHasil():
         tempEntropi2 = []
         tempHeight2 = []
         for i2 in range(bitmap2.height):
-            #ambil tiap baris dari data bitmap
+
             baris2 = z2[i2 * bitmap2.width:(i2 + 1) * bitmap2.width]
-            # hitung entropy dari tiap baris di data bitmap
-            entropi2 = stats.entropy(baris2)
-            tempEntropi2.append(entropi2)
-            # print(entropi2)
-            tempHeight2.append(i2)
-        
+            if baris2!=0:
+                entropi2 = stats.entropy(baris2)
+                tempEntropi2.append(entropi2)
+                tempHeight2.append(i2)
 
-        # entropi1 = [x ** 2 for x in tempEntropi]
-        # entropi2 = [x ** 2 for x in tempEntropi2]
-
-
-        # hasilSimilarity =100 * (1 - (hitungEuclidean(tempEntropi,tempEntropi2) / (sqrt(sum(entropi1)) * sqrt(sum(entropi2)))))
-        # print(hitungEuclidean(tempEntropi,tempEntropi2))
-        # filteredEntropi = filter(filter_small_values, tempEntropi)
-        # filteredEntropi2 = filter(filter_small_values, tempEntropi2)
-        hasilSimilarity = cosine_similarity(tempEntropi,tempEntropi2)*100
-        # print(sqrt(sum(entropi1)))
-        # print(sqrt(sum(entropi2)))
+        hasilSimilarity = cosineSimilarity(tempEntropi,tempEntropi2)*100
         print(f"{hasilSimilarity:.2f}")
-        # print(maxDistance)
+  
 
         
 
