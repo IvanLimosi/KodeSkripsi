@@ -78,6 +78,27 @@ def createEntropyGraph():
         plt.plot(tempHeight,listEntropi,marker="+")
         plt.show()
 
+def hitungFalseRate():
+    predictions = 1
+    true_labels = [1,1,1,1,1,1,0,0,0,0,0,0]
+
+    false_positives = 0
+    false_negatives = 0
+
+    for i in range(len(true_labels)):
+        if predictions == 1 and true_labels[i] == 0:
+            false_positives += 1
+        elif predictions == 0 and true_labels[i] == 1:
+            false_negatives += 1
+    
+    total_negatives = true_labels.count(0)
+    total_positives = true_labels.count(1)
+
+    fpr = false_positives / total_negatives
+    fnr = false_negatives / total_positives
+
+    print("False positive rate:", fpr)
+    print("False negative rate:", fnr)
     
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
@@ -169,6 +190,8 @@ def lihatHasil():
         hasilSimilarity4 = cosineSimilarity(listEntropi,tempEntropi4)*100
         hasilSimilarity5 = cosineSimilarity(listEntropi,tempEntropi5)*100
         hasilSimilarity6 = cosineSimilarity(listEntropi,tempEntropi6)*100
+
+        hitungFalseRate()
         # print(f"{hasilSimilarity:.2f}")
 
         frame1 = LabelFrame(top2,text="Cryptowall",padx=10)
