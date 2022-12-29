@@ -82,73 +82,73 @@ def createEntropyGraph():
         plt.plot(tempHeight,listEntropi,marker="+")
         plt.show()
 
-def hitungFalseRate():
-    true_labels = [1,1,1,1,1,1,0,0,0]
+# def hitungFalseRate():
+#     true_labels = [1,1,1,1,1,1,0,0,0]
 
-    false_positives = 0
-    false_negatives = 0
+#     false_positives = 0
+#     false_negatives = 0
 
-    for i in range(len(true_labels)):
-        if prediction[i] == 1 and true_labels[i] == 0:
-            false_positives += 1
-        elif prediction[i] == 0 and true_labels[i] == 1:
-            false_negatives += 1
+#     for i in range(len(true_labels)):
+#         if prediction[i] == 1 and true_labels[i] == 0:
+#             false_positives += 1
+#         elif prediction[i] == 0 and true_labels[i] == 1:
+#             false_negatives += 1
     
-    total_negatives = true_labels.count(0)
-    total_positives = true_labels.count(1)
+#     total_negatives = true_labels.count(0)
+#     total_positives = true_labels.count(1)
 
-    fpr = false_positives / total_negatives
-    fnr = false_negatives / total_positives
+#     fpr = false_positives / total_negatives
+#     fnr = false_negatives / total_positives
 
-    print("False positive rate:", fpr)
-    print("False negative rate:", fnr)
+#     print("False positive rate:", fpr)
+#     print("False negative rate:", fnr)
 
 def hitungTrueRate():
-    true_labels = [1,1,1,1,1,1,0,0,0]
+    # true_labels = [1,1,1,1,1,1,0,0,0]
 
-    # Calculate the number of true positive and true negative predictions
-    true_positives = 0
-    true_negatives = 0
-    for i in range(len(true_labels)):
-        if prediction[i] == 1 and true_labels[i] == 1:
-            true_positives += 1
-        elif prediction[i] == 0 and true_labels[i] == 0:
-            true_negatives += 1
+    # # Calculate the number of true positive and true negative predictions
+    # true_positives = 0
+    # true_negatives = 0
+    # for i in range(len(true_labels)):
+    #     if prediction[i] == 1 and true_labels[i] == 1:
+    #         true_positives += 1
+    #     elif prediction[i] == 0 and true_labels[i] == 0:
+    #         true_negatives += 1
 
-    # Calculate the true positive rate (TPR) and true negative rate (TNR)
-    total_positives = true_labels.count(1)
-    total_negatives = true_labels.count(0)
-    tpr = true_positives / total_positives
-    tnr = true_negatives / total_negatives
+    # # Calculate the true positive rate (TPR) and true negative rate (TNR)
+    # total_positives = true_labels.count(1)
+    # total_negatives = true_labels.count(0)
+    # tpr = true_positives / total_positives
+    # tnr = true_negatives / total_negatives
 
-    print("True positive rate:", tpr)
-    print("True negative rate:", tnr)
+    # print("True positive rate:", tpr)
+    # print("True negative rate:", tnr)
     # global confusionMatrix
-    # y_true = [1,1,1,1,1,1,0,0,0]
-    # confusionMatrix = confusion_matrix(y_true, prediction)
+    y_true = [1,1,1,1,1,1,0,0,0]
+    confusionMatrix = confusion_matrix(y_true, prediction)
 
-    # TP = confusionMatrix[1][1]
-    # TN = confusionMatrix[0][0]
-    # FP = confusionMatrix[0][1]
-    # FN = confusionMatrix[1][0]
+    TP = confusionMatrix[1][1]
+    TN = confusionMatrix[0][0]
+    FP = confusionMatrix[0][1]
+    FN = confusionMatrix[1][0]
 
-    # # Calculate the TPR
-    # TPR = TP / (TP + FN)
+    # Calculate the TPR
+    TPR = TP / (TP + FN)
 
-    # # Calculate the FPR
-    # FPR = FP / (TN + FP)
+    # Calculate the FPR
+    FPR = FP / (TN + FP)
 
-    # # Calculate the TNR
-    # TNR = TN / (TN + FP)
+    # Calculate the TNR
+    TNR = TN / (TN + FP)
 
-    # # Calculate the FNR
-    # FNR = FN / (TP + FN)
+    # Calculate the FNR
+    FNR = FN / (TP + FN)
 
-    # # Print the results
-    # print("TPR:", TPR)
-    # print("FPR:", FPR)
-    # print("TNR:", TNR)
-    # print("FNR:", FNR)
+    # Print the results
+    print("TPR:", TPR)
+    print("FPR:", FPR)
+    print("TNR:", TNR)
+    print("FNR:", FNR)
     
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
@@ -322,7 +322,7 @@ def lihatHasil():
         else:
             prediction.append(1)
 
-        hitungFalseRate()
+        # hitungFalseRate()
         hitungTrueRate()
         # print(f"{hasilSimilarity:.2f}")
 
