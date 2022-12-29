@@ -250,50 +250,50 @@ def lihatHasil():
         hasilSimilarity8 = cosineSimilarity(listEntropi,tempEntropi8)*100
         hasilSimilarity9 = cosineSimilarity(listEntropi,tempEntropi9)*100
 
-        if (hasilSimilarity1 >= 50):
+        if (hasilSimilarity1 >= 70):
             prediction.append(1)
         else:
             prediction.append(0)
 
-        if (hasilSimilarity2 >= 50):
+        if (hasilSimilarity2 >= 70):
             prediction.append(1)
         else:
             prediction.append(0)
 
-        if (hasilSimilarity3 >= 50):
+        if (hasilSimilarity3 >= 70):
             prediction.append(1)
         else:
             prediction.append(0)
 
-        if (hasilSimilarity4 >= 50):
+        if (hasilSimilarity4 >= 70):
             prediction.append(1)
         else:
             prediction.append(0)
 
-        if (hasilSimilarity5 >= 50):
+        if (hasilSimilarity5 >= 70):
             prediction.append(1)
         else:
             prediction.append(0)
 
-        if (hasilSimilarity6 >= 50):
+        if (hasilSimilarity6 >= 70):
             prediction.append(1)
         else:
             prediction.append(0)
         
-        if (hasilSimilarity7 >= 50):
-            prediction.append(1)
-        else:
+        if (hasilSimilarity7 >= 85):
             prediction.append(0)
+        else:
+            prediction.append(1)
 
-        if (hasilSimilarity8 >= 50):
-            prediction.append(1)
-        else:
+        if (hasilSimilarity8 >= 85):
             prediction.append(0)
+        else:
+            prediction.append(1)
 
-        if (hasilSimilarity9 >= 50):
-            prediction.append(1)
-        else:
+        if (hasilSimilarity9 >= 85):
             prediction.append(0)
+        else:
+            prediction.append(1)
 
         hitungFalseRate()
         hitungTrueRate()
