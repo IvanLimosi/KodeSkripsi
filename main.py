@@ -31,6 +31,7 @@ def upload():
 
     with open(root.filename, 'rb') as binary_file:
         data=binary_file.read()
+    
 
 def convertToGrayscale():
     if x==0:
