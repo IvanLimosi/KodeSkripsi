@@ -12,6 +12,8 @@ from scipy import stats
 #Inisialisasi variabel
 x=0
 label = None
+global prediction
+prediction = []
 
 
 #upload file sekaligus convert ke bitmap images
@@ -80,16 +82,15 @@ def createEntropyGraph():
         plt.show()
 
 def hitungFalseRate():
-    predictions = 1
-    true_labels = [1,1,1,1,1,1,0,0,0,0,0,0]
+    true_labels = [1,1,1,1,1,1,0,0,0]
 
     false_positives = 0
     false_negatives = 0
 
     for i in range(len(true_labels)):
-        if predictions == 1 and true_labels[i] == 0:
+        if prediction[i] == 1 and true_labels[i] == 0:
             false_positives += 1
-        elif predictions == 0 and true_labels[i] == 1:
+        elif prediction[i] == 0 and true_labels[i] == 1:
             false_negatives += 1
     
     total_negatives = true_labels.count(0)
@@ -100,6 +101,27 @@ def hitungFalseRate():
 
     print("False positive rate:", fpr)
     print("False negative rate:", fnr)
+
+def hitungTrueRate():
+    true_labels = [1,1,1,1,1,1,0,0,0]
+
+    # Calculate the number of true positive and true negative predictions
+    true_positives = 0
+    true_negatives = 0
+    for i in range(len(true_labels)):
+        if prediction[i] == 1 and true_labels[i] == 1:
+            true_positives += 1
+        elif prediction[i] == 0 and true_labels[i] == 0:
+            true_negatives += 1
+
+    # Calculate the true positive rate (TPR) and true negative rate (TNR)
+    total_positives = true_labels.count(1)
+    total_negatives = true_labels.count(0)
+    tpr = true_positives / total_positives
+    tnr = true_negatives / total_negatives
+
+    print("True positive rate:", tpr)
+    print("True negative rate:", tnr)
     
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
@@ -124,24 +146,36 @@ def lihatHasil():
         image4 = Image.open('Rex.png')
         image5 = Image.open('WannaCry.png')
         image6 = Image.open('WannaCryPlus.png')
+        image7 = Image.open('oriwotw.png')
+        image8 = Image.open('hades.png')
+        image9 = Image.open('tunic.png')
         data1 = list(image1.getdata())
         data2 = list(image2.getdata())
         data3 = list(image3.getdata())
         data4 = list(image4.getdata())
         data5 = list(image5.getdata())
         data6 = list(image6.getdata())
+        data7 = list(image7.getdata())
+        data8 = list(image8.getdata())
+        data9 = list(image9.getdata())
         image1 = image1.convert('L')
         image2 = image2.convert('L')
         image3 = image3.convert('L')
         image4 = image4.convert('L')
         image5 = image5.convert('L')
         image6 = image6.convert('L')
+        image7 = image7.convert('L')
+        image8 = image8.convert('L')
+        image9 = image9.convert('L')
         tempEntropi1 = []
         tempEntropi2 = []
         tempEntropi3 = []
         tempEntropi4 = []
         tempEntropi5 = []
         tempEntropi6 = []
+        tempEntropi7 = []
+        tempEntropi8 = []
+        tempEntropi9 = []
         # tempHeight2 = []
         for i in range(image1.height):
             baris1 = data1[i * image1.width:(i + 1) * image1.width]
@@ -184,6 +218,27 @@ def lihatHasil():
                 entropi6 = stats.entropy(baris6)
                 tempEntropi6.append(entropi6)
                 # tempHeight2.append(i)
+        
+        for i in range(image7.height):
+            baris7 = data7[i * image7.width:(i + 1) * image7.width]
+            if baris7!=0:
+                entropi7 = stats.entropy(baris7)
+                tempEntropi7.append(entropi7)
+                # tempHeight2.append(i)
+        
+        for i in range(image8.height):
+            baris8 = data8[i * image8.width:(i + 1) * image8.width]
+            if baris8!=0:
+                entropi8 = stats.entropy(baris8)
+                tempEntropi8.append(entropi8)
+                # tempHeight2.append(i)
+
+        for i in range(image9.height):
+            baris9 = data9[i * image9.width:(i + 1) * image9.width]
+            if baris9!=0:
+                entropi9 = stats.entropy(baris9)
+                tempEntropi9.append(entropi9)
+                # tempHeight2.append(i)
 
         hasilSimilarity1 = cosineSimilarity(listEntropi,tempEntropi1)*100
         hasilSimilarity2 = cosineSimilarity(listEntropi,tempEntropi2)*100
@@ -191,8 +246,57 @@ def lihatHasil():
         hasilSimilarity4 = cosineSimilarity(listEntropi,tempEntropi4)*100
         hasilSimilarity5 = cosineSimilarity(listEntropi,tempEntropi5)*100
         hasilSimilarity6 = cosineSimilarity(listEntropi,tempEntropi6)*100
+        hasilSimilarity7 = cosineSimilarity(listEntropi,tempEntropi7)*100
+        hasilSimilarity8 = cosineSimilarity(listEntropi,tempEntropi8)*100
+        hasilSimilarity9 = cosineSimilarity(listEntropi,tempEntropi9)*100
+
+        if (hasilSimilarity1 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity2 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity3 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity4 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity5 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity6 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+        
+        if (hasilSimilarity7 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity8 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity9 >= 50):
+            prediction.append(1)
+        else:
+            prediction.append(0)
 
         hitungFalseRate()
+        hitungTrueRate()
         # print(f"{hasilSimilarity:.2f}")
 
         frame1 = LabelFrame(top2,text="Cryptowall",padx=10)
@@ -207,6 +311,12 @@ def lihatHasil():
         frame5.grid(column=0,row=4)
         frame6 = LabelFrame(top2,text="WannaCry+",padx=10)
         frame6.grid(column=0,row=5)
+        frame7 = LabelFrame(top2,text="oriwotw",padx=10)
+        frame7.grid(column=1,row=0)
+        frame8 = LabelFrame(top2,text="hades",padx=10)
+        frame8.grid(column=1,row=1)
+        frame9 = LabelFrame(top2,text="tunic",padx=10)
+        frame9.grid(column=1,row=2)
 
         Hasil1 = Label(frame1,text=hasilSimilarity1)
         Hasil1.grid(column=0,row=0)
@@ -231,6 +341,18 @@ def lihatHasil():
         Hasil6 = Label(frame6,text=hasilSimilarity6)
         Hasil6.grid(column=0,row=5)
         Hasil6.config(text="{:.2f}%".format(hasilSimilarity6))
+
+        Hasil7 = Label(frame7,text=hasilSimilarity7)
+        Hasil7.grid(column=1,row=0)
+        Hasil7.config(text="{:.2f}%".format(hasilSimilarity7))
+
+        Hasil8 = Label(frame8,text=hasilSimilarity8)
+        Hasil8.grid(column=1,row=1)
+        Hasil8.config(text="{:.2f}%".format(hasilSimilarity8))
+
+        Hasil9 = Label(frame9,text=hasilSimilarity9)
+        Hasil9.grid(column=1,row=2)
+        Hasil9.config(text="{:.2f}%".format(hasilSimilarity9))
 
         # frame1.config(text="{:.1f}%".format(hasilSimilarity1))
 def grayscaleBankCryptowall():
