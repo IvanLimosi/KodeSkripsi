@@ -124,7 +124,7 @@ def hitungTrueRate():
     # print("True positive rate:", tpr)
     # print("True negative rate:", tnr)
     # global confusionMatrix
-    y_true = [1,1,1,1,1,1,0,0,0]
+    y_true = [1,1,1,1,1,1,0,0,0,1,1,1,1,1]
     confusionMatrix = confusion_matrix(y_true, prediction)
 
     TP = confusionMatrix[1][1]
@@ -176,6 +176,11 @@ def lihatHasil():
         image7 = Image.open('oriwotw.png')
         image8 = Image.open('hades.png')
         image9 = Image.open('tunic.png')
+        image10 = Image.open('Cryptowall.png')
+        image11 = Image.open('Cryptowall.png')
+        image12 = Image.open('Cryptowall.png')
+        image13 = Image.open('Cryptowall.png')
+        image14 = Image.open('Cryptowall.png')
         data1 = list(image1.getdata())
         data2 = list(image2.getdata())
         data3 = list(image3.getdata())
@@ -276,6 +281,12 @@ def lihatHasil():
         hasilSimilarity7 = cosineSimilarity(listEntropi,tempEntropi7)*100
         hasilSimilarity8 = cosineSimilarity(listEntropi,tempEntropi8)*100
         hasilSimilarity9 = cosineSimilarity(listEntropi,tempEntropi9)*100
+        hasilSimilarity10 = cosineSimilarity(listEntropi,tempEntropi10)*100
+        hasilSimilarity11 = cosineSimilarity(listEntropi,tempEntropi11)*100
+        hasilSimilarity12 = cosineSimilarity(listEntropi,tempEntropi12)*100
+        hasilSimilarity13 = cosineSimilarity(listEntropi,tempEntropi13)*100
+        hasilSimilarity14 = cosineSimilarity(listEntropi,tempEntropi14)*100
+        
 
         if (hasilSimilarity1 >= 70):
             prediction.append(1)
