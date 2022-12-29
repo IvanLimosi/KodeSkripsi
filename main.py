@@ -176,11 +176,11 @@ def lihatHasil():
         image7 = Image.open('oriwotw.png')
         image8 = Image.open('hades.png')
         image9 = Image.open('tunic.png')
-        image10 = Image.open('Cryptowall.png')
-        image11 = Image.open('Cryptowall.png')
-        image12 = Image.open('Cryptowall.png')
-        image13 = Image.open('Cryptowall.png')
-        image14 = Image.open('Cryptowall.png')
+        image10 = Image.open('petya1.png')
+        image11 = Image.open('petya2.png')
+        image12 = Image.open('vipasana1.png')
+        image13 = Image.open('vipasana2.png')
+        image14 = Image.open('vipasana3.png')
         data1 = list(image1.getdata())
         data2 = list(image2.getdata())
         data3 = list(image3.getdata())
@@ -190,6 +190,11 @@ def lihatHasil():
         data7 = list(image7.getdata())
         data8 = list(image8.getdata())
         data9 = list(image9.getdata())
+        data10 = list(image10.getdata())
+        data11 = list(image11.getdata())
+        data12 = list(image12.getdata())
+        data13 = list(image13.getdata())
+        data14 = list(image14.getdata())
         image1 = image1.convert('L')
         image2 = image2.convert('L')
         image3 = image3.convert('L')
@@ -199,6 +204,11 @@ def lihatHasil():
         image7 = image7.convert('L')
         image8 = image8.convert('L')
         image9 = image9.convert('L')
+        image10 = image10.convert('L')
+        image11 = image11.convert('L')
+        image12 = image12.convert('L')
+        image12 = image12.convert('L')
+        image12 = image12.convert('L')
         tempEntropi1 = []
         tempEntropi2 = []
         tempEntropi3 = []
@@ -208,6 +218,11 @@ def lihatHasil():
         tempEntropi7 = []
         tempEntropi8 = []
         tempEntropi9 = []
+        tempEntropi10 = []
+        tempEntropi11 = []
+        tempEntropi12 = []
+        tempEntropi13 = []
+        tempEntropi14 = []
         # tempHeight2 = []
         for i in range(image1.height):
             baris1 = data1[i * image1.width:(i + 1) * image1.width]
@@ -271,6 +286,41 @@ def lihatHasil():
                 entropi9 = stats.entropy(baris9)
                 tempEntropi9.append(entropi9)
                 # tempHeight2.append(i)
+        
+        for i in range(image10.height):
+            baris10 = data10[i * image10.width:(i + 1) * image10.width]
+            if baris10!=0:
+                entropi10 = stats.entropy(baris10)
+                tempEntropi10.append(entropi10)
+                # tempHeight2.append(i)
+        
+        for i in range(image10.height):
+            baris11 = data11[i * image11.width:(i + 1) * image11.width]
+            if baris11!=0:
+                entropi11 = stats.entropy(baris11)
+                tempEntropi11.append(entropi11)
+                # tempHeight2.append(i)
+        
+        for i in range(image12.height):
+            baris12 = data12[i * image12.width:(i + 1) * image12.width]
+            if baris12!=0:
+                entropi12 = stats.entropy(baris12)
+                tempEntropi12.append(entropi12)
+                # tempHeight2.append(i)
+
+        for i in range(image13.height):
+            baris13 = data13[i * image13.width:(i + 1) * image13.width]
+            if baris13!=0:
+                entropi13 = stats.entropy(baris13)
+                tempEntropi13.append(entropi13)
+                # tempHeight2.append(i)
+
+        for i in range(image14.height):
+            baris14 = data14[i * image14.width:(i + 1) * image14.width]
+            if baris14!=0:
+                entropi14 = stats.entropy(baris14)
+                tempEntropi14.append(entropi14)
+                # tempHeight2.append(i)
 
         hasilSimilarity1 = cosineSimilarity(listEntropi,tempEntropi1)*100
         hasilSimilarity2 = cosineSimilarity(listEntropi,tempEntropi2)*100
@@ -332,6 +382,31 @@ def lihatHasil():
             prediction.append(0)
         else:
             prediction.append(1)
+        
+        if (hasilSimilarity10 >= 70):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity11 >= 70):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity12 >= 70):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity13 >= 70):
+            prediction.append(1)
+        else:
+            prediction.append(0)
+
+        if (hasilSimilarity14 >= 70):
+            prediction.append(1)
+        else:
+            prediction.append(0)
 
         # hitungFalseRate()
         hitungTrueRate()
