@@ -7,6 +7,7 @@ from math import sqrt, ceil
 import cv2
 import matplotlib.pyplot as plt
 from scipy import stats
+from sklearn.metrics import confusion_matrix
 
 
 #Inisialisasi variabel
@@ -122,6 +123,32 @@ def hitungTrueRate():
 
     print("True positive rate:", tpr)
     print("True negative rate:", tnr)
+    # global confusionMatrix
+    # y_true = [1,1,1,1,1,1,0,0,0]
+    # confusionMatrix = confusion_matrix(y_true, prediction)
+
+    # TP = confusionMatrix[1][1]
+    # TN = confusionMatrix[0][0]
+    # FP = confusionMatrix[0][1]
+    # FN = confusionMatrix[1][0]
+
+    # # Calculate the TPR
+    # TPR = TP / (TP + FN)
+
+    # # Calculate the FPR
+    # FPR = FP / (TN + FP)
+
+    # # Calculate the TNR
+    # TNR = TN / (TN + FP)
+
+    # # Calculate the FNR
+    # FNR = FN / (TP + FN)
+
+    # # Print the results
+    # print("TPR:", TPR)
+    # print("FPR:", FPR)
+    # print("TNR:", TNR)
+    # print("FNR:", FNR)
     
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
