@@ -8,6 +8,7 @@ import cv2
 import matplotlib.pyplot as plt
 from scipy import stats
 from sklearn.metrics import confusion_matrix
+from statistics import mean
 
 
 #Inisialisasi variabel
@@ -31,8 +32,11 @@ def upload():
     label = Label(root, text=root.filename)
     label.grid(row=2, column=0)
 
-    with open(root.filename, 'rb') as binary_file:
-        data=binary_file.read()
+    if root.filename:
+        with open(root.filename, 'rb') as binary_file:
+            data=binary_file.read()
+    else:
+        messagebox.showwarning("Warning", "Tidak ada file yang di upload!")
     
 
 def convertToGrayscale():
@@ -124,7 +128,7 @@ def hitungTrueRate():
     # print("True positive rate:", tpr)
     # print("True negative rate:", tnr)
     # global confusionMatrix
-
+    global y_true
     y_true = [1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0]
     confusionMatrix = confusion_matrix(y_true, prediction)
 
@@ -144,6 +148,14 @@ def hitungTrueRate():
 
     # Calculate the FNR
     FNR = FN / (TP + FN)
+
+    global arrayRate
+    arrayRate = []
+
+    arrayRate.append(TPR)
+    arrayRate.append(FPR)
+    arrayRate.append(TNR)
+    arrayRate.append(FNR)
 
     # Print the results
     print("TPR:", TPR)
@@ -399,7 +411,7 @@ def lihatHasil():
         hasilSimilarity16 = cosineSimilarity(listEntropi,tempEntropi16)*100
         hasilSimilarity17 = cosineSimilarity(listEntropi,tempEntropi17)*100
         
-
+        
         if (hasilSimilarity1 >= 70):
             prediction.append(1)
         else:
@@ -488,6 +500,68 @@ def lihatHasil():
         # hitungFalseRate()
         hitungTrueRate()
         # print(f"{hasilSimilarity:.2f}")
+
+        arrayHasilSimilarity = []
+        arrayHasilSimilarity.append(hasilSimilarity1)
+        arrayHasilSimilarity.append(hasilSimilarity2)
+        arrayHasilSimilarity.append(hasilSimilarity3)
+        arrayHasilSimilarity.append(hasilSimilarity4)
+        arrayHasilSimilarity.append(hasilSimilarity5)
+        arrayHasilSimilarity.append(hasilSimilarity6)
+        arrayHasilSimilarity.append(hasilSimilarity7)
+        arrayHasilSimilarity.append(hasilSimilarity8)
+        arrayHasilSimilarity.append(hasilSimilarity9)
+        arrayHasilSimilarity.append(hasilSimilarity10)
+        arrayHasilSimilarity.append(hasilSimilarity11)
+        arrayHasilSimilarity.append(hasilSimilarity12)
+        arrayHasilSimilarity.append(hasilSimilarity13)
+        arrayHasilSimilarity.append(hasilSimilarity14)
+        arrayHasilSimilarity.append(hasilSimilarity15)
+        arrayHasilSimilarity.append(hasilSimilarity16)
+        arrayHasilSimilarity.append(hasilSimilarity17)
+
+        arrayMalware = []
+        arrayBenign = []
+        
+        for i in range(len(arrayHasilSimilarity)):
+            if y_true[i] == 0 :
+                arrayBenign.append(arrayHasilSimilarity[i])
+            else :
+                arrayMalware.append(arrayHasilSimilarity[i])
+        
+        averageMalware = mean(arrayMalware)
+        averageBenign = mean(arrayBenign)
+
+        print(averageMalware)
+        print(averageBenign)
+        
+        
+        for i in range(len(arrayHasilSimilarity)):
+            if arrayHasilSimilarity[i] < 100 and arrayHasilSimilarity[i] > 99.98:
+                if y_true[i] == 1:
+                    hasil = "Kemungkinan Besar File adalah Sebuah Malware"
+                    break
+                else:
+                    hasil = "Kemungkinan Besar File bukan Sebuah Malware"
+                    break
+            else :
+                if averageMalware > averageBenign:
+                    if arrayRate.index(max(arrayRate)) == 0:
+                        hasil = "Kemungkinan File adalah Sebuah Malware"
+                        break
+                    elif arrayRate.index(max(arrayRate)) == 1:
+                        hasil = "Kemungkinan File bukan Sebuah Malware"
+                        break
+                elif averageBenign > averageMalware:
+                    if arrayRate.index(max(arrayRate)) == 1:
+                        hasil = "Kemungkinan File adalah Sebuah Malware"
+                        break
+                    elif arrayRate.index(max(arrayRate)) == 0:
+                        hasil = "Kemungkinan File bukan Sebuah Malware"
+                        break
+
+        
+        print(hasil)
 
         frame1 = LabelFrame(top2,text="Cryptowall",padx=10)
         frame1.grid(column=0,row=0)
@@ -593,50 +667,16 @@ def lihatHasil():
         Hasil17.config(text="{:.2f}%".format(hasilSimilarity17))
 
         # frame1.config(text="{:.1f}%".format(hasilSimilarity1))
-def grayscaleBankCryptowall():
-    image = cv2.imread('Cryptowall.png')
-    window_name = 'Grayscale Image Cryptowall'
+
+def grayscaleBank(image):
+    image = cv2.imread(image)
+    window_name = 'Grayscale Image Malware'
     cv2.imshow(window_name, image)
     cv2.waitKey(0)
     cv2.destroyAllWindows() 
 
-def grayscaleBankMamba():
-    image = cv2.imread('Mamba.png')
-    window_name = 'Grayscale Image Mamba'
-    cv2.imshow(window_name, image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
-
-def grayscaleBankRedBoot():
-    image = cv2.imread('RedBoot.png')
-    window_name = 'Grayscale Image RedBoot'
-    cv2.imshow(window_name, image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
-
-def grayscaleBankRex():
-    image = cv2.imread('Rex.png')
-    window_name = 'Grayscale Image Rex'
-    cv2.imshow(window_name, image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
-
-def grayscaleBankWannaCry():
-    image = cv2.imread('WannaCry.png')
-    window_name = 'Grayscale Image WannaCry'
-    cv2.imshow(window_name, image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
-
-def grayscaleBankWannaCryPlus():
-    image = cv2.imread('WannaCryPlus.png')
-    window_name = 'Grayscale Image WannaCryPlus'
-    cv2.imshow(window_name, image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
-
-def entropyBankCryptowall():
-    gambar = Image.open('Cryptowall.png')
+def entropyBank(image):
+    gambar = Image.open(image)
     array = list(gambar.getdata())
     gambar = gambar.convert('L')
     listEntropi = []
@@ -650,88 +690,6 @@ def entropyBankCryptowall():
 
     plt.plot(listHeight,listEntropi,marker="+")
     plt.show()
-
-def entropyBankMamba():
-    gambar = Image.open('Mamba.png')
-    array = list(gambar.getdata())
-    gambar = gambar.convert('L')
-    listEntropi = []
-    listHeight = []
-    for i in range(gambar.height):
-        baris = array[i * gambar.width:(i+1) * gambar.width]
-        if baris!=0:
-            entropi = stats.entropy(baris)
-            listEntropi.append(entropi)
-            listHeight.append(i)
-
-    plt.plot(listHeight,listEntropi,marker="+")
-    plt.show()
-
-def entropyBankRedBoot():
-    gambar = Image.open('RedBoot.png')
-    array = list(gambar.getdata())
-    gambar = gambar.convert('L')
-    listEntropi = []
-    listHeight = []
-    for i in range(gambar.height):
-        baris = array[i * gambar.width:(i+1) * gambar.width]
-        if baris!=0:
-            entropi = stats.entropy(baris)
-            listEntropi.append(entropi)
-            listHeight.append(i)
-
-    plt.plot(listHeight,listEntropi,marker="+")
-    plt.show()
-
-def entropyBankRex():
-    gambar = Image.open('Rex.png')
-    array = list(gambar.getdata())
-    gambar = gambar.convert('L')
-    listEntropi = []
-    listHeight = []
-    for i in range(gambar.height):
-        baris = array[i * gambar.width:(i+1) * gambar.width]
-        if baris!=0:
-            entropi = stats.entropy(baris)
-            listEntropi.append(entropi)
-            listHeight.append(i)
-
-    plt.plot(listHeight,listEntropi,marker="+")
-    plt.show()
-
-def entropyBankWannaCry():
-    gambar = Image.open('WannaCry.png')
-    array = list(gambar.getdata())
-    gambar = gambar.convert('L')
-    listEntropi = []
-    listHeight = []
-    for i in range(gambar.height):
-        baris = array[i * gambar.width:(i+1) * gambar.width]
-        if baris!=0:
-            entropi = stats.entropy(baris)
-            listEntropi.append(entropi)
-            listHeight.append(i)
-
-    plt.plot(listHeight,listEntropi,marker="+")
-    plt.show()
-
-def entropyBankWannaCryPlus():
-    gambar = Image.open('WannaCryPlus.png')
-    array = list(gambar.getdata())
-    gambar = gambar.convert('L')
-    listEntropi = []
-    listHeight = []
-    for i in range(gambar.height):
-        baris = array[i * gambar.width:(i+1) * gambar.width]
-        if baris!=0:
-            entropi = stats.entropy(baris)
-            listEntropi.append(entropi)
-            listHeight.append(i)
-
-    plt.plot(listHeight,listEntropi,marker="+")
-    plt.show()
-
-
         
 
 def openBank():
@@ -741,45 +699,49 @@ def openBank():
 
     frameA = LabelFrame(top, text="Cryptowall", padx=10,pady=10)
     frameA.grid(row=0,column=0,padx=10, pady=10)
-    btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13,command=grayscaleBankCryptowall)
+    btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameA.cget("text")+'.png'))
     btn_grayscaleA.pack()
-    btn_entropyA = Button(frameA, text="Entropy Graph",command=entropyBankCryptowall)
+    btn_entropyA = Button(frameA, text="Entropy Graph", command=lambda: entropyBank(frameA.cget("text")+'.png'))
     btn_entropyA.pack()
 
     frameB = LabelFrame(top, text="Mamba", padx=10,pady=10)
     frameB.grid(row=0,column=1,padx=10, pady=10)
-    btn_grayscaleB = Button(frameB, text="Grayscale", padx= 13,command=grayscaleBankMamba)
+    btn_grayscaleB = Button(frameB, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameB.cget("text")+'.png'))
     btn_grayscaleB.pack()
-    btn_entropyB = Button(frameB, text="Entropy Graph" ,command=entropyBankMamba)
+    btn_entropyB = Button(frameB, text="Entropy Graph", command=lambda: entropyBank(frameB.cget("text")+'.png'))
     btn_entropyB.pack()
 
     frameC = LabelFrame(top, text="RedBoot", padx=10,pady=10)
     frameC.grid(row=0,column=2,padx=10, pady=10)
-    btn_grayscaleC = Button(frameC, text="Grayscale", padx= 13,command=grayscaleBankRedBoot)
+    btn_grayscaleC = Button(frameC, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameC.cget("text")+'.png'))
     btn_grayscaleC.pack()
-    btn_entropyC = Button(frameC, text="Entropy Graph",command=entropyBankRedBoot )
+    btn_entropyC = Button(frameC, text="Entropy Graph", command=lambda: entropyBank(frameC.cget("text")+'.png'))
     btn_entropyC.pack()
 
     frameD = LabelFrame(top, text="Rex", padx=10,pady=10)
     frameD.grid(row=1,column=0,padx=10, pady=10)
-    btn_grayscaleD = Button(frameD, text="Grayscale", padx= 13,command=grayscaleBankRex)
+    btn_grayscaleD = Button(frameD, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameD.cget("text")+'.png'))
     btn_grayscaleD.pack()
-    btn_entropyD = Button(frameD, text="Entropy Graph" ,command=entropyBankRex)
+    btn_entropyD = Button(frameD, text="Entropy Graph", command=lambda: entropyBank(frameD.cget("text")+'.png'))
     btn_entropyD.pack()
 
     frameE = LabelFrame(top, text="WannaCry", padx=10,pady=10)
     frameE.grid(row=1,column=1,padx=10, pady=10)
-    btn_grayscaleE = Button(frameE, text="Grayscale", padx= 13,command=grayscaleBankWannaCry)
+    btn_grayscaleE = Button(frameE, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameE.cget("text")+'.png'))
     btn_grayscaleE.pack()
-    btn_entropyE = Button(frameE, text="Entropy Graph" ,command=entropyBankWannaCry)
+    btn_entropyE = Button(frameE, text="Entropy Graph", command=lambda: entropyBank(frameE.cget("text")+'.png'))
     btn_entropyE.pack()
 
     frameF = LabelFrame(top, text="WannaCryPlus", padx=10,pady=10)
     frameF.grid(row=1,column=2,padx=10, pady=10)
-    btn_grayscaleF = Button(frameF, text="Grayscale", padx= 13,command=grayscaleBankWannaCryPlus)
+    btn_grayscaleF = Button(frameF, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameF.cget("text")+'.png'))
     btn_grayscaleF.pack()
-    btn_entropyF = Button(frameF, text="Entropy Graph" ,command=entropyBankWannaCryPlus)
+    btn_entropyF = Button(frameF, text="Entropy Graph", command=lambda: entropyBank(frameF.cget("text")+'.png'))
     btn_entropyF.pack()
+
+
+#==========================================================
+
 
 root = Tk()
 root.geometry("650x400")
