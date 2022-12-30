@@ -537,28 +537,29 @@ def lihatHasil():
         
         
         for i in range(len(arrayHasilSimilarity)):
-            if arrayHasilSimilarity[i] < 100 and arrayHasilSimilarity[i] > 99.98:
+            if arrayHasilSimilarity[i] > 99.8:
                 if y_true[i] == 1:
                     hasil = "Kemungkinan Besar File adalah Sebuah Malware"
                     break
                 else:
                     hasil = "Kemungkinan Besar File bukan Sebuah Malware"
                     break
+                    
             else :
-                if averageMalware > averageBenign:
+                if averageMalware > averageBenign or arrayRate.index(max(arrayRate)) == 1:
                     if arrayRate.index(max(arrayRate)) == 0:
                         hasil = "Kemungkinan File adalah Sebuah Malware"
-                        break
+                        
                     elif arrayRate.index(max(arrayRate)) == 1:
                         hasil = "Kemungkinan File bukan Sebuah Malware"
-                        break
-                elif averageBenign > averageMalware:
+                        
+                elif averageBenign > averageMalware or arrayRate.index(max(arrayRate)) == 0:
                     if arrayRate.index(max(arrayRate)) == 1:
                         hasil = "Kemungkinan File adalah Sebuah Malware"
-                        break
+                        
                     elif arrayRate.index(max(arrayRate)) == 0:
                         hasil = "Kemungkinan File bukan Sebuah Malware"
-                        break
+                        
 
         
         print(hasil)
