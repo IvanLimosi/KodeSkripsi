@@ -508,17 +508,17 @@ def lihatHasil():
             prediction.append(0)
 
         #dari sini
-        if (hasilSimilarity7 >= 70):
+        if (hasilSimilarity7 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity8 >= 70):
+        if (hasilSimilarity8 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity9 >= 70):
+        if (hasilSimilarity9 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
@@ -550,42 +550,42 @@ def lihatHasil():
             prediction.append(0)
         
         #dari sini
-        if (hasilSimilarity15 >= 70):
+        if (hasilSimilarity15 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity16 >= 70):
+        if (hasilSimilarity16 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity17 >= 70):
+        if (hasilSimilarity17 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity18 >= 70):
+        if (hasilSimilarity18 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity19 >= 70):
+        if (hasilSimilarity19 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity20 >= 70):
+        if (hasilSimilarity20 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity21 >= 70):
+        if (hasilSimilarity21 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity22 >= 70):
+        if (hasilSimilarity22 >= 85):
             prediction.append(0)
         else:
             prediction.append(1)
