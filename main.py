@@ -9,9 +9,11 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from sklearn.metrics import confusion_matrix
 from statistics import mean
+import os
 
 
 #Inisialisasi variabel
+
 x=0
 label = None
 global prediction
@@ -28,8 +30,8 @@ def upload():
 
     root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("all files", "*.*"), ("jpg files", "*.jpg")))
     x = 1
-
-    label = Label(root, text=root.filename)
+    filename = os.path.basename(root.filename)
+    label = Label(root, text=filename)
     label.grid(row=2, column=0)
 
     if root.filename:
@@ -37,6 +39,7 @@ def upload():
             data=binary_file.read()
     else:
         messagebox.showwarning("Warning", "Tidak ada file yang di upload!")
+        x = 0
     
 
 def convertToGrayscale():
@@ -86,49 +89,12 @@ def createEntropyGraph():
         plt.plot(tempHeight,listEntropi,marker="+")
         plt.show()
 
-# def hitungFalseRate():
-#     true_labels = [1,1,1,1,1,1,0,0,0]
-
-#     false_positives = 0
-#     false_negatives = 0
-
-#     for i in range(len(true_labels)):
-#         if prediction[i] == 1 and true_labels[i] == 0:
-#             false_positives += 1
-#         elif prediction[i] == 0 and true_labels[i] == 1:
-#             false_negatives += 1
-    
-#     total_negatives = true_labels.count(0)
-#     total_positives = true_labels.count(1)
-
-#     fpr = false_positives / total_negatives
-#     fnr = false_negatives / total_positives
-
-#     print("False positive rate:", fpr)
-#     print("False negative rate:", fnr)
 
 def hitungTrueRate():
-    # true_labels = [1,1,1,1,1,1,0,0,0]
-
-    # # Calculate the number of true positive and true negative predictions
-    # true_positives = 0
-    # true_negatives = 0
-    # for i in range(len(true_labels)):
-    #     if prediction[i] == 1 and true_labels[i] == 1:
-    #         true_positives += 1
-    #     elif prediction[i] == 0 and true_labels[i] == 0:
-    #         true_negatives += 1
-
-    # # Calculate the true positive rate (TPR) and true negative rate (TNR)
-    # total_positives = true_labels.count(1)
-    # total_negatives = true_labels.count(0)
-    # tpr = true_positives / total_positives
-    # tnr = true_negatives / total_negatives
-
-    # print("True positive rate:", tpr)
-    # print("True negative rate:", tnr)
-    # global confusionMatrix
     global y_true
+    global arrayRate
+
+    #keadaan file pada bank malware
     y_true = [1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0]
     confusionMatrix = confusion_matrix(y_true, prediction)
 
@@ -137,40 +103,83 @@ def hitungTrueRate():
     FP = confusionMatrix[0][1]
     FN = confusionMatrix[1][0]
 
-    # Calculate the TPR
     TPR = TP / (TP + FN)
 
-    # Calculate the FPR
     FPR = FP / (TN + FP)
 
-    # Calculate the TNR
-    TNR = TN / (TN + FP)
-
-    # Calculate the FNR
-    FNR = FN / (TP + FN)
-
-    global arrayRate
     arrayRate = []
 
     arrayRate.append(TPR)
     arrayRate.append(FPR)
-    arrayRate.append(TNR)
-    arrayRate.append(FNR)
 
-    # Print the results
     print("TPR:", TPR)
     print("FPR:", FPR)
-    print("TNR:", TNR)
-    print("FNR:", FNR)
-    
+
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
     norm_list1 = sqrt(sum(a ** 2 for a in list1))
     norm_list2 = sqrt(sum(b ** 2 for b in list2))
     return dot_product / (norm_list1 * norm_list2)
 
-# def filter_small_values(x):
-#     return x > 1e-10
+def detectMalware():
+    arrayMalware = []
+    arrayBenign = []
+        
+    for i in range(len(arrayHasilSimilarity)):
+        if y_true[i] == 0 :
+            arrayBenign.append(arrayHasilSimilarity[i])
+        else :
+            arrayMalware.append(arrayHasilSimilarity[i])
+        
+    averageMalware = mean(arrayMalware)
+    averageBenign = mean(arrayBenign)
+
+    #digunakan untuk pengecekan rata-rata persentase kemiripan dari file malware dan file benign yang ada pada bank
+    print(averageMalware)
+    print(averageBenign)
+        
+    for i in range(len(arrayHasilSimilarity)):
+        if arrayHasilSimilarity[i] > 99.8:
+            if y_true[i] == 1:
+                hasil = "Kemungkinan Besar File adalah Sebuah Malware"
+                break
+            else:
+                hasil = "Kemungkinan Besar File bukan Sebuah Malware"
+                break
+                    
+        else :
+            if averageMalware > averageBenign:
+
+                #jika file dengan similarity tertinggi = malware dan nilai TPR paling tinggi
+                if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
+                    hasil = "Malware 1"
+                    
+                #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
+                elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
+                    hasil = "Bukan Malware 1"
+                #jika file dengan similarity tertinggi = benign tapi nilai TPR paling tinggi
+                elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 0:
+                    hasil = "Bukan Malware X"
+                else:
+                    hasil = "Malware 2"
+                        
+            elif averageBenign > averageMalware:
+
+                #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
+                if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
+                    hasil = "Bukan Malware 2"
+                    
+                #jika file dengan similarity tertinggi = malware dan nilai TPR paling tinggi
+                elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
+                    hasil = "Malware 3"
+
+                #jika file dengan similarity tertinggi = benign dan nilai FPR paling tinggi
+                elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 1:
+                    hasil = "Malware 4"
+                else:
+                    hasil = "Bukan Malware 3"
+    
+    return(hasil)
 
 def lihatHasil():
     if x==0:
@@ -507,7 +516,7 @@ def lihatHasil():
         else:
             prediction.append(0)
 
-        #dari sini
+        #untuk prediksi jika sebuah file adalah benign file akan digunakan threshold sebesar 85%
         if (hasilSimilarity7 >= 85):
             prediction.append(0)
         else:
@@ -522,7 +531,6 @@ def lihatHasil():
             prediction.append(0)
         else:
             prediction.append(1)
-        #sampe sini
 
         if (hasilSimilarity10 >= 70):
             prediction.append(1)
@@ -549,7 +557,6 @@ def lihatHasil():
         else:
             prediction.append(0)
         
-        #dari sini
         if (hasilSimilarity15 >= 85):
             prediction.append(0)
         else:
@@ -589,14 +596,12 @@ def lihatHasil():
             prediction.append(0)
         else:
             prediction.append(1)
-        
-        #sampe sini
 
-        # hitungFalseRate()
         hitungTrueRate()
-        # print(f"{hasilSimilarity:.2f}")
 
+        global arrayHasilSimilarity
         arrayHasilSimilarity = []
+
         arrayHasilSimilarity.append(hasilSimilarity1)
         arrayHasilSimilarity.append(hasilSimilarity2)
         arrayHasilSimilarity.append(hasilSimilarity3)
@@ -620,69 +625,8 @@ def lihatHasil():
         arrayHasilSimilarity.append(hasilSimilarity21)
         arrayHasilSimilarity.append(hasilSimilarity22)
 
-        arrayMalware = []
-        arrayBenign = []
-        
-        for i in range(len(arrayHasilSimilarity)):
-            if y_true[i] == 0 :
-                arrayBenign.append(arrayHasilSimilarity[i])
-            else :
-                arrayMalware.append(arrayHasilSimilarity[i])
-        
-        averageMalware = mean(arrayMalware)
-        averageBenign = mean(arrayBenign)
-
-        print(averageMalware)
-        print(averageBenign)
-        
-        
-        for i in range(len(arrayHasilSimilarity)):
-            if arrayHasilSimilarity[i] > 99.8:
-                if y_true[i] == 1:
-                    hasil = "Kemungkinan Besar File adalah Sebuah Malware"
-                    break
-                else:
-                    hasil = "Kemungkinan Besar File bukan Sebuah Malware"
-                    break
-                    
-            else :
-                if averageMalware > averageBenign:
-                    # if arrayRate.index(max(arrayRate)) == 0:
-                    #     hasil = "Kemungkinan File adalah Sebuah Malware"
-                        
-                    # elif arrayRate.index(max(arrayRate)) == 1:
-                    #     hasil = "Kemungkinan File bukan Sebuah Malware"
-
-                    if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
-                        hasil = "Malware 1"
-                    elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
-                        hasil = "Bukan Malware 1"
-                    else:
-                        hasil = "Malware 2"
-                        
-                elif averageBenign > averageMalware:
-                    # if arrayRate.index(max(arrayRate)) == 1:
-                    #     hasil = "Kemungkinan File adalah Sebuah Malware"
-                        
-                    # elif arrayRate.index(max(arrayRate)) == 0:
-                    #     hasil = "Kemungkinan File bukan Sebuah Malware"
-
-
-                    #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
-                    if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
-                        hasil = "Bukan Malware 2"
-                    
-                    #jika file dengan similarity tertinggi = malware dan nilai TPR paling tinggi
-                    elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
-                        hasil = "Malware 3"
-
-                    #jika file dengan similarity tertinggi = benign dan nilai FPR paling tinggi
-                    elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 1:
-                        hasil = "Malware 4"
-                    else:
-                        hasil = "Bukan Malware 3"
-
-        
+        #jalankan function untuk mendeteksi malware
+        hasil = detectMalware()
         print(hasil)
 
         frame1 = LabelFrame(top2,text="Cryptowall",padx=10)
@@ -846,7 +790,7 @@ def entropyBank(image):
 
 def openBank():
     top = Toplevel()
-    top.geometry("500x400")
+    top.geometry("525x400")
     top.title("Bank Malware")
 
     frameA = LabelFrame(top, text="Cryptowall", padx=10,pady=10)
@@ -891,6 +835,40 @@ def openBank():
     btn_entropyF = Button(frameF, text="Entropy Graph", command=lambda: entropyBank(frameF.cget("text")+'.png'))
     btn_entropyF.pack()
 
+    frameG = LabelFrame(top, text="petya1", padx=10,pady=10)
+    frameG.grid(row=0,column=3,padx=10, pady=10)
+    btn_grayscaleG = Button(frameG, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameG.cget("text")+'.png'))
+    btn_grayscaleG.pack()
+    btn_entropyG = Button(frameG, text="Entropy Graph", command=lambda: entropyBank(frameG.cget("text")+'.png'))
+    btn_entropyG.pack()
+    
+    frameH = LabelFrame(top, text="petya2", padx=10,pady=10)
+    frameH.grid(row=1,column=3,padx=10, pady=10)
+    btn_grayscaleH = Button(frameH, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameH.cget("text")+'.png'))
+    btn_grayscaleH.pack()
+    btn_entropyH = Button(frameH, text="Entropy Graph", command=lambda: entropyBank(frameH.cget("text")+'.png'))
+    btn_entropyH.pack()
+
+    frameI = LabelFrame(top, text="vipasana1", padx=10,pady=10)
+    frameI.grid(row=2,column=0,padx=10, pady=10)
+    btn_grayscaleI = Button(frameI, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameI.cget("text")+'.png'))
+    btn_grayscaleI.pack()
+    btn_entropyI = Button(frameI, text="Entropy Graph", command=lambda: entropyBank(frameI.cget("text")+'.png'))
+    btn_entropyI.pack()
+
+    frameJ = LabelFrame(top, text="vipasana2", padx=10,pady=10)
+    frameJ.grid(row=2,column=1,padx=10, pady=10)
+    btn_grayscaleJ = Button(frameJ, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameJ.cget("text")+'.png'))
+    btn_grayscaleJ.pack()
+    btn_entropyJ = Button(frameJ, text="Entropy Graph", command=lambda: entropyBank(frameJ.cget("text")+'.png'))
+    btn_entropyJ.pack()
+
+    frameK = LabelFrame(top, text="vipasana2", padx=10,pady=10)
+    frameK.grid(row=2,column=2,padx=10, pady=10)
+    btn_grayscaleK = Button(frameK, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameK.cget("text")+'.png'))
+    btn_grayscaleK.pack()
+    btn_entropyK = Button(frameK, text="Entropy Graph", command=lambda: entropyBank(frameK.cget("text")+'.png'))
+    btn_entropyK.pack()
 
 #==========================================================
 
