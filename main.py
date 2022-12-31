@@ -506,22 +506,24 @@ def lihatHasil():
             prediction.append(1)
         else:
             prediction.append(0)
-        
-        if (hasilSimilarity7 >= 85):
+
+        #dari sini
+        if (hasilSimilarity7 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity8 >= 85):
+        if (hasilSimilarity8 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity9 >= 85):
+        if (hasilSimilarity9 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
-        
+        #sampe sini
+
         if (hasilSimilarity10 >= 70):
             prediction.append(1)
         else:
@@ -547,45 +549,48 @@ def lihatHasil():
         else:
             prediction.append(0)
         
-        if (hasilSimilarity15 >= 85):
+        #dari sini
+        if (hasilSimilarity15 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity16 >= 85):
+        if (hasilSimilarity16 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity17 >= 85):
+        if (hasilSimilarity17 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity18 >= 85):
+        if (hasilSimilarity18 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity19 >= 85):
+        if (hasilSimilarity19 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity20 >= 85):
+        if (hasilSimilarity20 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity21 >= 85):
+        if (hasilSimilarity21 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
 
-        if (hasilSimilarity22 >= 85):
+        if (hasilSimilarity22 >= 70):
             prediction.append(0)
         else:
             prediction.append(1)
+        
+        #sampe sini
 
         # hitungFalseRate()
         hitungTrueRate()
@@ -666,6 +671,8 @@ def lihatHasil():
                         hasil = "Bukan Malware 2"
                     elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
                         hasil = "Malware 3"
+                    elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 1:
+                        hasil = "Malware 4"
                     else:
                         hasil = "Bukan Malware 3"
 
