@@ -129,7 +129,7 @@ def hitungTrueRate():
     # print("True negative rate:", tnr)
     # global confusionMatrix
     global y_true
-    y_true = [1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0]
+    y_true = [1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0]
     confusionMatrix = confusion_matrix(y_true, prediction)
 
     TP = confusionMatrix[1][1]
@@ -197,6 +197,11 @@ def lihatHasil():
         image15 = Image.open('rks.png')
         image16 = Image.open('notepad.png')
         image17 = Image.open('progressReport.png')
+        image18 = Image.open('AfterBurner.png')
+        image19 = Image.open('CiscoCollabHost.png')
+        image20 = Image.open('GithubDesktop.png')
+        image21 = Image.open('NetBeans.png')
+        image22 = Image.open('ZeroTierOne.png')
 
         image1 = image1.convert('L')
         image2 = image2.convert('L')
@@ -215,6 +220,11 @@ def lihatHasil():
         image15 = image15.convert('L')
         image16 = image16.convert('L')
         image17 = image17.convert('L')
+        image18 = image18.convert('L')
+        image19 = image19.convert('L')
+        image20 = image20.convert('L')
+        image21 = image21.convert('L')
+        image22 = image22.convert('L')
 
         image1 = image1.convert('1')
         image2 = image2.convert('1')
@@ -233,6 +243,11 @@ def lihatHasil():
         image15 = image15.convert('1')
         image16 = image16.convert('1')
         image17 = image17.convert('1')
+        image18 = image18.convert('1')
+        image19 = image19.convert('1')
+        image20 = image20.convert('1')
+        image21 = image21.convert('1')
+        image22 = image22.convert('1')
 
         data1 = list(image1.getdata())
         data2 = list(image2.getdata())
@@ -251,6 +266,11 @@ def lihatHasil():
         data15 = list(image15.getdata())
         data16 = list(image16.getdata())
         data17 = list(image17.getdata())
+        data18 = list(image18.getdata())
+        data19 = list(image19.getdata())
+        data20 = list(image20.getdata())
+        data21 = list(image21.getdata())
+        data22 = list(image22.getdata())
 
         tempEntropi1 = []
         tempEntropi2 = []
@@ -269,6 +289,11 @@ def lihatHasil():
         tempEntropi15 = []
         tempEntropi16 = []
         tempEntropi17 = []
+        tempEntropi18 = []
+        tempEntropi19 = []
+        tempEntropi20 = []
+        tempEntropi21 = []
+        tempEntropi22 = []
 
         # tempHeight2 = []
         for i in range(image1.height):
@@ -390,6 +415,41 @@ def lihatHasil():
                 tempEntropi17.append(entropi17)
                 # tempHeight2.append(i)
 
+        for i in range(image18.height):
+            baris18 = data18[i * image18.width:(i + 1) * image18.width]
+            if baris18!=0:
+                entropi18 = stats.entropy(baris18)
+                tempEntropi18.append(entropi18)
+                # tempHeight2.append(i)
+
+        for i in range(image19.height):
+            baris19 = data19[i * image19.width:(i + 1) * image19.width]
+            if baris19!=0:
+                entropi19 = stats.entropy(baris19)
+                tempEntropi19.append(entropi19)
+                # tempHeight2.append(i)
+
+        for i in range(image20.height):
+            baris20 = data20[i * image20.width:(i + 1) * image20.width]
+            if baris20!=0:
+                entropi20 = stats.entropy(baris20)
+                tempEntropi20.append(entropi20)
+                # tempHeight2.append(i)
+
+        for i in range(image21.height):
+            baris21 = data21[i * image21.width:(i + 1) * image21.width]
+            if baris21!=0:
+                entropi21 = stats.entropy(baris21)
+                tempEntropi21.append(entropi21)
+                # tempHeight2.append(i)
+
+        for i in range(image22.height):
+            baris22 = data22[i * image22.width:(i + 1) * image22.width]
+            if baris22!=0:
+                entropi22 = stats.entropy(baris22)
+                tempEntropi22.append(entropi22)
+                # tempHeight2.append(i)
+
         #bersihkan list prediksi tiap kali lihat hasil
         prediction.clear()
 
@@ -410,6 +470,11 @@ def lihatHasil():
         hasilSimilarity15 = cosineSimilarity(listEntropi,tempEntropi15)*100
         hasilSimilarity16 = cosineSimilarity(listEntropi,tempEntropi16)*100
         hasilSimilarity17 = cosineSimilarity(listEntropi,tempEntropi17)*100
+        hasilSimilarity18 = cosineSimilarity(listEntropi,tempEntropi18)*100
+        hasilSimilarity19 = cosineSimilarity(listEntropi,tempEntropi19)*100
+        hasilSimilarity20 = cosineSimilarity(listEntropi,tempEntropi20)*100
+        hasilSimilarity21 = cosineSimilarity(listEntropi,tempEntropi21)*100
+        hasilSimilarity22 = cosineSimilarity(listEntropi,tempEntropi22)*100
         
         
         if (hasilSimilarity1 >= 70):
@@ -497,6 +562,31 @@ def lihatHasil():
         else:
             prediction.append(1)
 
+        if (hasilSimilarity18 >= 85):
+            prediction.append(0)
+        else:
+            prediction.append(1)
+
+        if (hasilSimilarity19 >= 85):
+            prediction.append(0)
+        else:
+            prediction.append(1)
+
+        if (hasilSimilarity20 >= 85):
+            prediction.append(0)
+        else:
+            prediction.append(1)
+
+        if (hasilSimilarity21 >= 85):
+            prediction.append(0)
+        else:
+            prediction.append(1)
+
+        if (hasilSimilarity22 >= 85):
+            prediction.append(0)
+        else:
+            prediction.append(1)
+
         # hitungFalseRate()
         hitungTrueRate()
         # print(f"{hasilSimilarity:.2f}")
@@ -519,6 +609,11 @@ def lihatHasil():
         arrayHasilSimilarity.append(hasilSimilarity15)
         arrayHasilSimilarity.append(hasilSimilarity16)
         arrayHasilSimilarity.append(hasilSimilarity17)
+        arrayHasilSimilarity.append(hasilSimilarity18)
+        arrayHasilSimilarity.append(hasilSimilarity19)
+        arrayHasilSimilarity.append(hasilSimilarity20)
+        arrayHasilSimilarity.append(hasilSimilarity21)
+        arrayHasilSimilarity.append(hasilSimilarity22)
 
         arrayMalware = []
         arrayBenign = []
@@ -546,20 +641,33 @@ def lihatHasil():
                     break
                     
             else :
-                if averageMalware > averageBenign or arrayRate.index(max(arrayRate)) == 1:
-                    if arrayRate.index(max(arrayRate)) == 0:
-                        hasil = "Kemungkinan File adalah Sebuah Malware"
+                if averageMalware > averageBenign:
+                    # if arrayRate.index(max(arrayRate)) == 0:
+                    #     hasil = "Kemungkinan File adalah Sebuah Malware"
                         
-                    elif arrayRate.index(max(arrayRate)) == 1:
-                        hasil = "Kemungkinan File bukan Sebuah Malware"
+                    # elif arrayRate.index(max(arrayRate)) == 1:
+                    #     hasil = "Kemungkinan File bukan Sebuah Malware"
+
+                    if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
+                        hasil = "Malware 1"
+                    elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
+                        hasil = "Bukan Malware 1"
+                    else:
+                        hasil = "Malware 2"
                         
-                elif averageBenign > averageMalware or arrayRate.index(max(arrayRate)) == 0:
-                    if arrayRate.index(max(arrayRate)) == 1:
-                        hasil = "Kemungkinan File adalah Sebuah Malware"
+                elif averageBenign > averageMalware:
+                    # if arrayRate.index(max(arrayRate)) == 1:
+                    #     hasil = "Kemungkinan File adalah Sebuah Malware"
                         
-                    elif arrayRate.index(max(arrayRate)) == 0:
-                        hasil = "Kemungkinan File bukan Sebuah Malware"
-                        
+                    # elif arrayRate.index(max(arrayRate)) == 0:
+                    #     hasil = "Kemungkinan File bukan Sebuah Malware"
+
+                    if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
+                        hasil = "Bukan Malware 2"
+                    elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
+                        hasil = "Malware 3"
+                    else:
+                        hasil = "Bukan Malware 3"
 
         
         print(hasil)
@@ -598,74 +706,104 @@ def lihatHasil():
         frame16.grid(column=2,row=3)
         frame17 = LabelFrame(top2,text="ProgressReport.pdf",padx=10)
         frame17.grid(column=2,row=4)
+        frame18 = LabelFrame(top2,text="AfterBurner.exe",padx=10)
+        frame18.grid(column=2,row=5)
+        frame19 = LabelFrame(top2,text="Webex.exe",padx=10)
+        frame19.grid(column=0,row=6)
+        frame20 = LabelFrame(top2,text="Github.exe",padx=10)
+        frame20.grid(column=1,row=6)
+        frame21 = LabelFrame(top2,text="NetBeans.exe",padx=10)
+        frame21.grid(column=2,row=6)
+        frame22 = LabelFrame(top2,text="ZeroTierOne.exe",padx=10)
+        frame22.grid(column=0,row=7)
 
         Hasil1 = Label(frame1,text=hasilSimilarity1)
-        Hasil1.grid(column=0,row=0)
+        Hasil1.pack()
         Hasil1.config(text="{:.2f}%".format(hasilSimilarity1))
 
         Hasil2 = Label(frame2,text=hasilSimilarity2)
-        Hasil2.grid(column=0,row=1)
+        Hasil2.pack()
         Hasil2.config(text="{:.2f}%".format(hasilSimilarity2))
 
         Hasil3 = Label(frame3,text=hasilSimilarity3)
-        Hasil3.grid(column=0,row=2)
+        Hasil3.pack()
         Hasil3.config(text="{:.2f}%".format(hasilSimilarity3))
 
         Hasil4 = Label(frame4,text=hasilSimilarity4)
-        Hasil4.grid(column=0,row=3)
+        Hasil4.pack()
         Hasil4.config(text="{:.2f}%".format(hasilSimilarity4))
 
         Hasil5 = Label(frame5,text=hasilSimilarity5)
-        Hasil5.grid(column=0,row=4)
+        Hasil5.pack()
         Hasil5.config(text="{:.2f}%".format(hasilSimilarity5))
 
         Hasil6 = Label(frame6,text=hasilSimilarity6)
-        Hasil6.grid(column=0,row=5)
+        Hasil6.pack()
         Hasil6.config(text="{:.2f}%".format(hasilSimilarity6))
 
         Hasil7 = Label(frame7,text=hasilSimilarity7)
-        Hasil7.grid(column=1,row=0)
+        Hasil7.pack()
         Hasil7.config(text="{:.2f}%".format(hasilSimilarity7))
 
         Hasil8 = Label(frame8,text=hasilSimilarity8)
-        Hasil8.grid(column=1,row=1)
+        Hasil8.pack()
         Hasil8.config(text="{:.2f}%".format(hasilSimilarity8))
 
         Hasil9 = Label(frame9,text=hasilSimilarity9)
-        Hasil9.grid(column=1,row=2)
+        Hasil9.pack()
         Hasil9.config(text="{:.2f}%".format(hasilSimilarity9))
 
         Hasil10 = Label(frame10,text=hasilSimilarity10)
-        Hasil10.grid(column=1,row=3)
+        Hasil10.pack()
         Hasil10.config(text="{:.2f}%".format(hasilSimilarity10))
 
         Hasil11 = Label(frame11,text=hasilSimilarity11)
-        Hasil11.grid(column=1,row=4)
+        Hasil11.pack()
         Hasil11.config(text="{:.2f}%".format(hasilSimilarity11))
 
         Hasil12 = Label(frame12,text=hasilSimilarity12)
-        Hasil12.grid(column=1,row=5)
+        Hasil12.pack()
         Hasil12.config(text="{:.2f}%".format(hasilSimilarity12))
 
         Hasil13 = Label(frame13,text=hasilSimilarity13)
-        Hasil13.grid(column=2,row=0)
+        Hasil13.pack()
         Hasil13.config(text="{:.2f}%".format(hasilSimilarity13))
 
         Hasil14 = Label(frame14,text=hasilSimilarity14)
-        Hasil14.grid(column=2,row=1)
+        Hasil14.pack()
         Hasil14.config(text="{:.2f}%".format(hasilSimilarity14))
 
         Hasil15 = Label(frame15,text=hasilSimilarity15)
-        Hasil15.grid(column=2,row=2)
+        Hasil15.pack()
         Hasil15.config(text="{:.2f}%".format(hasilSimilarity15))
 
         Hasil16 = Label(frame16,text=hasilSimilarity16)
-        Hasil16.grid(column=2,row=3)
+        Hasil16.pack()
         Hasil16.config(text="{:.2f}%".format(hasilSimilarity16))
 
         Hasil17 = Label(frame17,text=hasilSimilarity17)
-        Hasil17.grid(column=2,row=4)
+        Hasil17.pack()
         Hasil17.config(text="{:.2f}%".format(hasilSimilarity17))
+
+        Hasil18 = Label(frame18,text=hasilSimilarity18)
+        Hasil18.pack()
+        Hasil18.config(text="{:.2f}%".format(hasilSimilarity18))
+
+        Hasil19 = Label(frame19,text=hasilSimilarity19)
+        Hasil19.pack()
+        Hasil19.config(text="{:.2f}%".format(hasilSimilarity19))
+
+        Hasil20 = Label(frame20,text=hasilSimilarity20)
+        Hasil20.pack()
+        Hasil20.config(text="{:.2f}%".format(hasilSimilarity20))
+
+        Hasil21 = Label(frame21,text=hasilSimilarity21)
+        Hasil21.pack()
+        Hasil21.config(text="{:.2f}%".format(hasilSimilarity21))
+
+        Hasil22 = Label(frame22,text=hasilSimilarity22)
+        Hasil22.pack()
+        Hasil22.config(text="{:.2f}%".format(hasilSimilarity22))
 
         # frame1.config(text="{:.1f}%".format(hasilSimilarity1))
 
