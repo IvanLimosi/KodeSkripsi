@@ -26,7 +26,7 @@ def upload():
     if label is not None:
         label.grid_forget()
 
-    root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("jpg files", "*.jpg"),("all files", "*.*")))
+    root.filename = filedialog.askopenfilename(initialdir="/Skripsi", title="upload a file", filetypes=(("all files", "*.*"), ("jpg files", "*.jpg")))
     x = 1
 
     label = Label(root, text=root.filename)
@@ -667,10 +667,16 @@ def lihatHasil():
                     # elif arrayRate.index(max(arrayRate)) == 0:
                     #     hasil = "Kemungkinan File bukan Sebuah Malware"
 
+
+                    #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
                     if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
                         hasil = "Bukan Malware 2"
+                    
+                    #jika file dengan similarity tertinggi = malware dan nilai TPR paling tinggi
                     elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
                         hasil = "Malware 3"
+
+                    #jika file dengan similarity tertinggi = benign dan nilai FPR paling tinggi
                     elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 1:
                         hasil = "Malware 4"
                     else:
