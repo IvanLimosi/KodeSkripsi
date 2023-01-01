@@ -19,12 +19,55 @@ label = None
 global prediction
 prediction = []
 
+def bikinchart():
+
+    name = ['Cryptowall','Mamba','RedBoot','Rex','WannaCry','WannaCryPlus','oriwotw.exe','hades','tunic','petya v1','petya v2', 'vipasana v1','vipasana v2', 'vipasana v3', 'rks.pdf', 'notepad.exe', 'progressReport.pdf', 'AfterBurner.exe', 'CiscoCollabHost.exe', 'GithubDesktop.exe', 'NetBeans.exe', 'ZeroTierOne.exe']
+    
+
+    # Figure Size
+    fig, ax = plt.subplots(figsize =(16, 9))
+ 
+    # Horizontal Bar Plot
+    ax.barh(name, arrayHasilSimilarity)
+ 
+    # Remove axes splines
+    for s in ['top', 'bottom', 'left', 'right']:
+        ax.spines[s].set_visible(False)
+ 
+    # Remove x, y Ticks
+    ax.xaxis.set_ticks_position('none')
+    ax.yaxis.set_ticks_position('none')
+ 
+    # Add padding between axes and labels
+    ax.xaxis.set_tick_params(pad = 5)
+    ax.yaxis.set_tick_params(pad = 10)
+ 
+    # Add x, y gridlines
+    ax.grid(b = True, color ='grey',linestyle ='-.', linewidth = 0.5, alpha = 0.2)
+ 
+    # Show top values
+    ax.invert_yaxis()
+ 
+    # Add annotation to bars
+    for i in ax.patches:
+        plt.text(i.get_width()+0.2, i.get_y()+0.5,
+                str(round((i.get_width()), 2)),
+                fontsize = 10, fontweight ='bold',
+                color ='grey')
+ 
+    # Add Plot Title
+    ax.set_title('Persentase kemiripan file ' + filename + ' dengan benign file dan malware yang ada pada bank malware.', loc ='left', )
+ 
+    # Show Plot
+    plt.show()
+
 
 #upload file sekaligus convert ke bitmap images
 def upload():
     global x
     global data
     global label
+    global filename
     if label is not None:
         label.grid_forget()
 
@@ -135,16 +178,18 @@ def detectMalware():
     averageBenign = mean(arrayBenign)
 
     #digunakan untuk pengecekan rata-rata persentase kemiripan dari file malware dan file benign yang ada pada bank
-    print(averageMalware)
-    print(averageBenign)
+    print("rata-rata similarity dengan file malware = "+str(averageMalware))
+    print("rata-rata similarity dengan file benign = "+str(averageBenign))
         
     for i in range(len(arrayHasilSimilarity)):
         if arrayHasilSimilarity[i] > 99.8:
             if y_true[i] == 1:
                 hasil = "Kemungkinan Besar File adalah Sebuah Malware"
+                hasil2 = "Dapat dipastikan file yang diupload adalah sebuah Malware!"
                 break
             else:
                 hasil = "Kemungkinan Besar File bukan Sebuah Malware"
+                hasil2 = "Dapat dipastikan file yang diupload bukan sebuah Malware!"
                 break
                     
         else :
@@ -153,40 +198,47 @@ def detectMalware():
                 #jika file dengan similarity tertinggi = malware dan nilai TPR paling tinggi
                 if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
                     hasil = "Malware 1"
+                    hasil2 = "File yang diupload adalah Malware!"
                     
                 #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
                 elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
                     hasil = "Bukan Malware 1"
+                    hasil2 = "File yang diupload adalah bukan Malware!"
                 #jika file dengan similarity tertinggi = benign tapi nilai TPR paling tinggi
                 elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 0:
-                    hasil = "Bukan Malware X"
+                    hasil = "Bukan Malware 2"
+                    hasil2 = "File yang diupload adalah bukan Malware!"
                 else:
                     hasil = "Malware 2"
+                    hasil2 = "File yang diupload adalah Malware!"
                         
             elif averageBenign > averageMalware:
 
                 #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
                 if y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 1:
-                    hasil = "Bukan Malware 2"
+                    hasil = "Bukan Malware 3"
+                    hasil2 = "File yang diupload adalah bukan Malware!"
                     
                 #jika file dengan similarity tertinggi = malware dan nilai TPR paling tinggi
                 elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 1 and arrayRate.index(max(arrayRate)) == 0:
                     hasil = "Malware 3"
+                    hasil2 = "File yang diupload adalah Malware!"
 
                 #jika file dengan similarity tertinggi = benign dan nilai FPR paling tinggi
                 elif y_true[arrayHasilSimilarity.index(max(arrayHasilSimilarity))] == 0 and arrayRate.index(max(arrayRate)) == 1:
                     hasil = "Malware 4"
+                    hasil2 = "File yang diupload adalah Malware!"
                 else:
-                    hasil = "Bukan Malware 3"
+                    hasil = "Bukan Malware 4"
+                    hasil2 = "File yang diupload adalah bukan Malware!"
     
-    return(hasil)
+    return(hasil,hasil2)
 
 def lihatHasil():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
         top2 = Toplevel()
-        top2.geometry("300x500")
         top2.title("Hasil Similarity")
         #nanti bikin bitmap banyak untuk tiap malware yang ada dibank malware. dibuat juga buat entropy sama grayscale masing-masing
         image1 = Image.open('Cryptowall.png')
@@ -626,8 +678,8 @@ def lihatHasil():
         arrayHasilSimilarity.append(hasilSimilarity22)
 
         #jalankan function untuk mendeteksi malware
-        hasil = detectMalware()
-        print(hasil)
+        hasilA,hasilB = detectMalware()
+        print(hasilA)
 
         frame1 = LabelFrame(top2,text="Cryptowall",padx=10)
         frame1.grid(column=0,row=0)
@@ -671,7 +723,7 @@ def lihatHasil():
         frame20.grid(column=1,row=6)
         frame21 = LabelFrame(top2,text="NetBeans.exe",padx=10)
         frame21.grid(column=2,row=6)
-        frame22 = LabelFrame(top2,text="ZeroTierOne.exe",padx=10)
+        frame22 = LabelFrame(top2,text="ZeroTierOne.exe",padx=15)
         frame22.grid(column=0,row=7)
 
         Hasil1 = Label(frame1,text=hasilSimilarity1)
@@ -761,6 +813,12 @@ def lihatHasil():
         Hasil22 = Label(frame22,text=hasilSimilarity22)
         Hasil22.pack()
         Hasil22.config(text="{:.2f}%".format(hasilSimilarity22))
+
+        HasilAkhir = Label(top2,text = hasilB, padx=70)
+        HasilAkhir.grid(column=0,row=8,columnspan = 3)
+
+        width = HasilAkhir.winfo_reqwidth()
+        top2.geometry(f"{width}x500")
 
         # frame1.config(text="{:.1f}%".format(hasilSimilarity1))
 
@@ -887,6 +945,8 @@ frame2.grid(row=0,column=1,padx=10)
 btn_upload = Button(frame, text="Upload File",command=upload)
 btn_upload.pack()
 
+btn_chart = Button(frame,text="chart",command=bikinchart)
+btn_chart.pack()
 #button untuk buka bank malware
 btn_bank = Button(frame2, text="Bank Malware",padx=75,pady=10,command=openBank)
 btn_bank.grid(row=0,column=0,pady=15)
