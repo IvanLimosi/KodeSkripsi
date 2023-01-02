@@ -19,48 +19,6 @@ label = None
 global prediction
 prediction = []
 
-def bikinchart():
-
-    name = ['Cryptowall','Mamba','RedBoot','Rex','WannaCry','WannaCryPlus','oriwotw.exe','hades','tunic','petya v1','petya v2', 'vipasana v1','vipasana v2', 'vipasana v3', 'rks.pdf', 'notepad.exe', 'progressReport.pdf', 'AfterBurner.exe', 'CiscoCollabHost.exe', 'GithubDesktop.exe', 'NetBeans.exe', 'ZeroTierOne.exe']
-    
-
-    # Figure Size
-    fig, ax = plt.subplots(figsize =(16, 9))
- 
-    # Horizontal Bar Plot
-    ax.barh(name, arrayHasilSimilarity)
- 
-    # Remove axes splines
-    for s in ['top', 'bottom', 'left', 'right']:
-        ax.spines[s].set_visible(False)
- 
-    # Remove x, y Ticks
-    ax.xaxis.set_ticks_position('none')
-    ax.yaxis.set_ticks_position('none')
- 
-    # Add padding between axes and labels
-    ax.xaxis.set_tick_params(pad = 5)
-    ax.yaxis.set_tick_params(pad = 10)
- 
-    # Add x, y gridlines
-    ax.grid(b = True, color ='grey',linestyle ='-.', linewidth = 0.5, alpha = 0.2)
- 
-    # Show top values
-    ax.invert_yaxis()
- 
-    # Add annotation to bars
-    for i in ax.patches:
-        plt.text(i.get_width()+0.2, i.get_y()+0.5,
-                str(round((i.get_width()), 2)),
-                fontsize = 10, fontweight ='bold',
-                color ='grey')
- 
-    # Add Plot Title
-    ax.set_title('Persentase kemiripan file ' + filename + ' dengan benign file dan malware yang ada pada bank malware.', loc ='left', )
- 
-    # Show Plot
-    plt.show()
-
 
 #upload file sekaligus convert ke bitmap images
 def upload():
@@ -935,7 +893,6 @@ root = Tk()
 root.geometry("650x400")
 root.title("Aplikasi Pengecekan Kemiripan Malware")
 
-
 frame = LabelFrame(root, text="Upload File", padx=150,pady=150)
 frame.grid(row=0,column=0,padx=10)
 frame2 = LabelFrame(root, text="Menu",pady=15)
@@ -945,8 +902,6 @@ frame2.grid(row=0,column=1,padx=10)
 btn_upload = Button(frame, text="Upload File",command=upload)
 btn_upload.pack()
 
-btn_chart = Button(frame,text="chart",command=bikinchart)
-btn_chart.pack()
 #button untuk buka bank malware
 btn_bank = Button(frame2, text="Bank Malware",padx=75,pady=10,command=openBank)
 btn_bank.grid(row=0,column=0,pady=15)
