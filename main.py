@@ -879,7 +879,7 @@ def openBank():
     btn_entropyJ = Button(frameJ, text="Entropy Graph", command=lambda: entropyBank(frameJ.cget("text")+'.png'))
     btn_entropyJ.pack()
 
-    frameK = LabelFrame(top, text="vipasana2", padx=10,pady=10)
+    frameK = LabelFrame(top, text="vipasana3", padx=10,pady=10)
     frameK.grid(row=2,column=2,padx=10, pady=10)
     btn_grayscaleK = Button(frameK, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameK.cget("text")+'.png'))
     btn_grayscaleK.pack()
