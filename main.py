@@ -43,29 +43,51 @@ def upload():
         x = 0
     
 
+# def convertToGrayscale():
+#     if x==0:
+#         messagebox.showerror(title=None, message="File Belum Diupload!")
+#     else:
+#         #ambil panjang data dalam bytes
+#         len1 = len(data)
+#         #buat vektor dari panjang data dalam bytes
+#         d = np.frombuffer(data, dtype=np.uint8)
+#         #Hitung akar kuadrat dari panjang data dan dibulatkan ke atas agar hasil dari gambar akan dekat dengan persegi
+#         sqrt_len = int(ceil(sqrt(len1)))
+#         #Panjang data baru
+#         len2 = sqrt_len*sqrt_len
+#         #jumlah sisa bytes yang harus di tambahkan angka 0 agar dapat menjadi sama
+#         pad_len = len2 - len1
+#         #tambah 0 di akhir
+#         padded_d = np.hstack((d,np.zeros(pad_len, np.uint8)))
+#         #ubah data menjadi array 2 dimensi
+#         im = np.reshape(padded_d,(sqrt_len, sqrt_len))
+#         #simpan gambar menjadi im.png
+#         cv2.imwrite('im.png',im)
+#         #tampilkan gambar di perangkat lunak
+#         label2 = Label(image=cv2.imshow('im',im))
+#         label2.grid(row = 3, column=0)
+
 def convertToGrayscale():
-    if x==0:
-        messagebox.showerror(title=None, message="File Belum Diupload!")
-    else:
-        #ambil panjang data dalam bytes
-        len1 = len(data)
-        #buat vektor dari panjang data dalam bytes
-        d = np.frombuffer(data, dtype=np.uint8)
-        #Hitung akar kuadrat dari panjang data dan dibulatkan ke atas agar hasil dari gambar akan dekat dengan persegi
-        sqrt_len = int(ceil(sqrt(len1)))
-        #Panjang data baru
-        len2 = sqrt_len*sqrt_len
-        #jumlah sisa bytes yang harus di tambahkan angka 0 agar dapat menjadi sama
-        pad_len = len2 - len1
-        #tambah 0 di akhir
-        padded_d = np.hstack((d,np.zeros(pad_len, np.uint8)))
-        #ubah data menjadi array 2 dimensi
-        im = np.reshape(padded_d,(sqrt_len, sqrt_len))
-        #simpan gambar menjadi im.png
-        cv2.imwrite('im.png',im)
-        #tampilkan gambar di perangkat lunak
-        label2 = Label(image=cv2.imshow('im',im))
-        label2.grid(row = 3, column=0)
+    width = int(ceil(sqrt(len(data))))
+    height = int(ceil(sqrt(len(data))))
+    array_2d = [[0 for _ in range(width)] for _ in range(height)]
+    for i in range(height):
+        for j in range(width):
+            index = i * width + j
+            if index < len(data):
+                array_2d[i][j] = data[index]
+            else:
+                break
+    numpy_array_2d = np.array(array_2d, dtype=np.uint8)
+
+    cv2.imwrite('im.png',numpy_array_2d)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    #tampilkan gambar di perangkat lunak
+    label2 = Label(image=cv2.imshow('im',numpy_array_2d))
+    label2.grid(row = 3, column=0)
+    # return array_2d
         
 def createEntropyGraph():
     if x==0:
