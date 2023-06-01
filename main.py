@@ -43,7 +43,6 @@ def upload():
     else:
         messagebox.showwarning("Warning", "Tidak ada file yang di upload!")
         x = 0
-    
 
 # def convertToGrayscale():
 #     if x==0:
@@ -70,10 +69,12 @@ def upload():
 #         label2.grid(row = 3, column=0)
 
 def convertToGrayscale():
+    global array_2d
+    global width, height
     width = int(ceil(sqrt(len(data))))
     height = int(ceil(sqrt(len(data))))
     array_2d = [[0 for _ in range(width)] for _ in range(height)]
-   
+
     for i in range(height):
         for j in range(width):
             index = i * width + j
@@ -107,24 +108,41 @@ def hitungEntropi(data):
         entropy -= p * math.log2(p)  
 
     return entropy
-        
+
+# def createEntropyGraph():
+#     if x==0:
+#         messagebox.showerror(title=None, message="File Belum Diupload!")
+#     else:
+#         global listEntropi,tempHeight
+#         bitmap = Image.open('im.png')
+#         z = list(bitmap.getdata())
+
+#         listEntropi = []
+#         tempHeight = []
+#         for i in range(bitmap.height):
+
+#             baris = z[i * bitmap.width:(i + 1) * bitmap.width]
+#             if baris!=0:
+#                 entropi = hitungEntropi(baris)
+#                 listEntropi.append(entropi)
+#                 tempHeight.append(i)
+
+#         plt.plot(tempHeight,listEntropi,marker="+")
+#         plt.show()
+
 def createEntropyGraph():
     if x==0:
         messagebox.showerror(title=None, message="File Belum Diupload!")
     else:
         global listEntropi,tempHeight
-        bitmap = Image.open('im.png')
-        z = list(bitmap.getdata())
-        
         listEntropi = []
         tempHeight = []
-        for i in range(bitmap.height):
 
-            baris = z[i * bitmap.width:(i + 1) * bitmap.width]
-            if baris!=0:
-                entropi = hitungEntropi(baris)
-                listEntropi.append(entropi)
-                tempHeight.append(i)
+        for i in range(height):
+            baris = array_2d[i]
+            nilaiEntropi = hitungEntropi(baris)
+            listEntropi.append(nilaiEntropi)
+            tempHeight.append(i)
 
         plt.plot(tempHeight,listEntropi,marker="+")
         plt.show()
@@ -155,11 +173,11 @@ def createEntropyGraph():
 #     print("TPR:", TPR)
 #     print("FPR:", FPR)
 
-# def cosineSimilarity(list1, list2):
-#     dot_product = sum(a * b for a, b in zip(list1, list2))
-#     norm_list1 = sqrt(sum(a ** 2 for a in list1))
-#     norm_list2 = sqrt(sum(b ** 2 for b in list2))
-#     return dot_product / (norm_list1 * norm_list2)
+def cosineSimilarity(list1, list2):
+    dot_product = sum(a * b for a, b in zip(list1, list2))
+    norm_list1 = sqrt(sum(a ** 2 for a in list1))
+    norm_list2 = sqrt(sum(b ** 2 for b in list2))
+    return dot_product / (norm_list1 * norm_list2)
 
 # def detectMalware():
 #     arrayMalware = []
@@ -208,7 +226,7 @@ def createEntropyGraph():
 #                 else:
 #                     hasil = "Malware 2"
 #                     hasil2 = "File yang diupload adalah Malware!"
-                        
+
 #             elif averageBenign > averageMalware:
 
 #                 #jika file dengan similarity tertinggi = malware dan nilai FPR paling tinggi
