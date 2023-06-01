@@ -119,6 +119,7 @@ def createEntropyGraph():
 
         for i in range(height):
             baris = array_2d[i]
+            # nilaiEntropi = hitungEntropi(baris)
             nilaiEntropi = hitungEntropi(baris)
             listEntropi.append(nilaiEntropi)
             tempHeight.append(i)
@@ -126,13 +127,28 @@ def createEntropyGraph():
         plt.plot(tempHeight,listEntropi,marker="+")
         plt.show()
 
-def calculateEntropyList():
+def calculateEntropyList(data2):
     EntropyList = []
-    for i in range (len(array_2d)):
-        baris = array_2d[i]
+    for i in range (len(data2)):
+        baris = data2[i]
         nilaiEntropi = hitungEntropi(baris)
         EntropyList.append(nilaiEntropi)
     return EntropyList
+
+def convertToGrayscale2(data2):
+    width = int(ceil(sqrt(len(data2))))
+    height = int(ceil(sqrt(len(data2))))
+    array_2d = [[0 for _ in range(width)] for _ in range(height)]
+
+    for i in range(height):
+        for j in range(width):
+            index = i * width + j
+            if index < len(data2):
+                array_2d[i][j] = data2[index]
+            else:
+                break
+    return array_2d
+
 
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
@@ -140,6 +156,12 @@ def cosineSimilarity(list1, list2):
     norm_list2 = sqrt(sum(b ** 2 for b in list2))
     return dot_product / (norm_list1 * norm_list2)
 
+def hitungSimilarity(listData):
+    similarity = []
+    for i in range (len(listData)):
+        fileData = open(listData[i],'rb').read()
+        dataGrayscale = convertToGrayscale2(fileData)
+        dataEntropi = calculateEntropyList()
 def lihatHasil():
     malware = []
     nonMalware = []
@@ -149,28 +171,27 @@ def lihatHasil():
 
 
 
-# def grayscaleBank(image):
-#     image = cv2.imread(image)
-#     window_name = 'Grayscale Image Malware'
-#     cv2.imshow(window_name, image)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows() 
+def grayscaleBank(image):
+    image = cv2.imread(image)
+    window_name = 'Grayscale Image Malware'
+    cv2.imshow(window_name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows() 
 
-# def entropyBank(image):
-#     gambar = Image.open(image)
-#     array = list(gambar.getdata())
-#     gambar = gambar.convert('L')
-#     listEntropi = []
-#     listHeight = []
-#     for i in range(gambar.height):
-#         baris = array[i * gambar.width:(i+1) * gambar.width]
-#         if baris!=0:
-#             entropi = stats.entropy(baris)
-#             listEntropi.append(entropi)
-#             listHeight.append(i)
+def entropyBank(image):
+    gambar = Image.open(image)
+    array = list(gambar.getdata())
+    listEntropi = []
+    listHeight = []
+    for i in range(gambar.height):
+        baris = array[i * gambar.width:(i+1) * gambar.width]
+        if baris!=0:
+            entropi = stats.entropy(baris)
+            listEntropi.append(entropi)
+            listHeight.append(i)
 
-#     plt.plot(listHeight,listEntropi,marker="+")
-#     plt.show()
+    plt.plot(listHeight,listEntropi,marker="+")
+    plt.show()
         
 
 def openBank():
