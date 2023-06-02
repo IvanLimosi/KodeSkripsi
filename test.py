@@ -157,18 +157,31 @@ def cosineSimilarity(list1, list2):
     return dot_product / (norm_list1 * norm_list2)
 
 def hitungSimilarity(listData):
-    similarity = []
+    similarities = []
     for i in range (len(listData)):
         fileData = open(listData[i],'rb').read()
         dataGrayscale = convertToGrayscale2(fileData)
-        dataEntropi = calculateEntropyList()
-        
+        dataEntropi = calculateEntropyList(dataGrayscale)
+        similarity = cosineSimilarity(listEntropi,dataEntropi)
+        similarities.append(similarity)
+
+    return similarities
+
 def lihatHasil():
     malware = []
     nonMalware = []
 
-    for i in range (len(malware)):
-        similarityNonMalware = cosineSimilarity(listEntropi,calculateEntropyList())
+    similarityMalware = hitungSimilarity(malware)
+    #disini untuk tampilkan tiap kemiripan dengan malware.
+    similarityNonMalware = hitungSimilarity(nonMalware)
+
+    avgSimilarityMalware = sum(similarityMalware)/len(similarityMalware)
+    avgSimilarityNonMalware = sum(similarityNonMalware)/len(similarityNonMalware)
+
+    if(avgSimilarityMalware>avgSimilarityNonMalware):
+        hasil = "ada kemungkinan file sebuah malware."
+    
+
 
 
 
