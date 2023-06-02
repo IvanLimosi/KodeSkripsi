@@ -149,7 +149,6 @@ def convertToGrayscale2(data2):
                 break
     return array_2d
 
-
 def cosineSimilarity(list1, list2):
     dot_product = sum(a * b for a, b in zip(list1, list2))
     norm_list1 = sqrt(sum(a ** 2 for a in list1))
@@ -168,8 +167,12 @@ def hitungSimilarity(listData):
     return similarities
 
 def lihatHasil():
-    malware = []
-    nonMalware = []
+    #kalo pake laptop harus ganti path
+    pathMalware = r'C:\Users\IEUser\Documents\GitHub\Malware'
+    pathNonMalware = r'C:\Users\IEUser\Documents\GitHub\Non Malware'
+
+    malware = [os.path.join(pathMalware, f) for f in os.listdir(pathMalware) if os.path.isfile(os.path.join(pathMalware, f))]
+    nonMalware = [os.path.join(pathNonMalware, f) for f in os.listdir(pathNonMalware) if os.path.isfile(os.path.join(pathNonMalware, f))]
 
     similarityMalware = hitungSimilarity(malware)
     #disini untuk tampilkan tiap kemiripan dengan malware.
@@ -180,7 +183,11 @@ def lihatHasil():
 
     if(avgSimilarityMalware>avgSimilarityNonMalware):
         hasil = "ada kemungkinan file sebuah malware."
-    
+    else:
+        hasil = "kemungkinan file adalah bukan malware."
+
+    print(hasil)
+   
 
 
 
@@ -213,7 +220,7 @@ def openBank():
     top.geometry("525x400")
     top.title("Bank Malware")
 
-    frameA = LabelFrame(top, text="Friday13th408", padx=10,pady=10)
+    frameA = LabelFrame(top, text="Cryptowall", padx=10,pady=10)
     frameA.grid(row=0,column=0,padx=10, pady=10)
     btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameA.cget("text")+'.png'))
     btn_grayscaleA.pack()
@@ -319,7 +326,7 @@ btn_entropy = Button(frame2, text="Create Entropy Graphs",padx=55,pady=10,comman
 btn_entropy.grid(row=2,column=0,pady=15)
 
 #,command=lihatHasil
-btn_hasil = Button(frame2, text="Lihat Persentase Hasil Perbandingan",padx=19,pady=10)
+btn_hasil = Button(frame2, text="Lihat Persentase Hasil Perbandingan",command=lihatHasil,padx=19,pady=10)
 btn_hasil.grid(row=3,column=0,pady=15)
 
 root.mainloop()
