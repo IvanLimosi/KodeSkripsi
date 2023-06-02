@@ -162,6 +162,7 @@ def hitungSimilarity(listData):
         fileData = open(listData[i],'rb').read()
         dataGrayscale = convertToGrayscale2(fileData)
         dataEntropi = calculateEntropyList()
+        
 def lihatHasil():
     malware = []
     nonMalware = []
@@ -186,7 +187,7 @@ def entropyBank(image):
     for i in range(gambar.height):
         baris = array[i * gambar.width:(i+1) * gambar.width]
         if baris!=0:
-            entropi = stats.entropy(baris)
+            entropi = hitungEntropi(baris)
             listEntropi.append(entropi)
             listHeight.append(i)
 
@@ -199,7 +200,7 @@ def openBank():
     top.geometry("525x400")
     top.title("Bank Malware")
 
-    frameA = LabelFrame(top, text="Cryptowall", padx=10,pady=10)
+    frameA = LabelFrame(top, text="Friday13th408", padx=10,pady=10)
     frameA.grid(row=0,column=0,padx=10, pady=10)
     btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameA.cget("text")+'.png'))
     btn_grayscaleA.pack()
