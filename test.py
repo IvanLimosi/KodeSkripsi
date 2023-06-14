@@ -44,30 +44,6 @@ def upload():
         messagebox.showwarning("Warning", "Tidak ada file yang di upload!")
         x = 0
 
-# def convertToGrayscale():
-#     if x==0:
-#         messagebox.showerror(title=None, message="File Belum Diupload!")
-#     else:
-#         #ambil panjang data dalam bytes
-#         len1 = len(data)
-#         #buat vektor dari panjang data dalam bytes
-#         d = np.frombuffer(data, dtype=np.uint8)
-#         #Hitung akar kuadrat dari panjang data dan dibulatkan ke atas agar hasil dari gambar akan dekat dengan persegi
-#         sqrt_len = int(ceil(sqrt(len1)))
-#         #Panjang data baru
-#         len2 = sqrt_len*sqrt_len
-#         #jumlah sisa bytes yang harus di tambahkan angka 0 agar dapat menjadi sama
-#         pad_len = len2 - len1
-#         #tambah 0 di akhir
-#         padded_d = np.hstack((d,np.zeros(pad_len, np.uint8)))
-#         #ubah data menjadi array 2 dimensi
-#         im = np.reshape(padded_d,(sqrt_len, sqrt_len))
-#         #simpan gambar menjadi im.png
-#         cv2.imwrite('im.png',im)
-#         #tampilkan gambar di perangkat lunak
-#         label2 = Label(image=cv2.imshow('im',im))
-#         label2.grid(row = 3, column=0)
-
 def convertToGrayscale():
     global array_2d
     global width, height
@@ -167,135 +143,148 @@ def hitungSimilarity(listData):
     return similarities
 
 def lihatHasil():
-    #kalo pake laptop harus ganti path
-    pathMalware = r'C:\Users\IEUser\Documents\GitHub\Malware'
-    pathNonMalware = r'C:\Users\IEUser\Documents\GitHub\Non Malware'
+    top2=Toplevel()
+    top2.title("Hasil Similarity")
+
+    pathMalware = r'.\Malware'
+    pathNonMalware = r'.\Non Malware'
 
     malware = [os.path.join(pathMalware, f) for f in os.listdir(pathMalware) if os.path.isfile(os.path.join(pathMalware, f))]
     nonMalware = [os.path.join(pathNonMalware, f) for f in os.listdir(pathNonMalware) if os.path.isfile(os.path.join(pathNonMalware, f))]
 
     similarityMalware = hitungSimilarity(malware)
-    #disini untuk tampilkan tiap kemiripan dengan malware.
     similarityNonMalware = hitungSimilarity(nonMalware)
 
-    avgSimilarityMalware = sum(similarityMalware)/len(similarityMalware)
-    avgSimilarityNonMalware = sum(similarityNonMalware)/len(similarityNonMalware)
+    avgSimilarityMalware = sum(similarityMalware)/len(similarityMalware)*100
+    avgSimilarityNonMalware = sum(similarityNonMalware)/len(similarityNonMalware)*100
 
-    if(avgSimilarityMalware>avgSimilarityNonMalware):
-        hasil = "ada kemungkinan file sebuah malware."
-    else:
+    if(avgSimilarityMalware>60 and avgSimilarityMalware>avgSimilarityNonMalware):
+        hasil = "kemungkinan file adalah sebuah malware"
+
+    elif(avgSimilarityNonMalware>60 and avgSimilarityNonMalware>avgSimilarityMalware):
         hasil = "kemungkinan file adalah bukan malware."
 
-    print(hasil)
-   
+    else:
+        hasil = "tidak dapat diklasifikasikan"
 
+    # print(hasil)
+    # print(avgSimilarityMalware)
+    # print(avgSimilarityNonMalware)
 
+    def writeSimilarity():
+        with open('hasilSimilarity.txt', 'w') as f:
+            f.write('--- Similarity dengan File Malware ---\n')
+            for file, nilai in zip(malware, similarityMalware):
+                f.write(f'File: {file}, Similarity: {nilai*100:.2f}%\n')
+            f.write('--- Similarity dengan File Non Malware ---\n')
+            for file, nilai in zip(nonMalware, similarityNonMalware):
+                f.write(f'File: {file}, Similarity: {nilai*100:.2f}%\n')
+        messagebox.showinfo('Info','File sudah diperbarui.')
 
+    writeButton = Button(top2, text="Print Hasil Similarity", command=writeSimilarity)
+    writeButton.grid(column=0, row=2, columnspan=2)
 
-def grayscaleBank(image):
-    image = cv2.imread(image)
-    window_name = 'Grayscale Image Malware'
-    cv2.imshow(window_name, image)
+    frame1 = LabelFrame(top2, text="Rata-rata similarity dengan Malware")
+    frame1.grid(column=0, row=0, padx=10, pady=10)
+
+    frame2 = LabelFrame(top2, text="Rata-rata similarity dengan non malware")
+    frame2.grid(column=1, row=0, padx=10, pady=10)
+
+    frame3 = LabelFrame(top2, text="Hasil Akhir")
+    frame3.grid(column=0, row=1, columnspan=2, padx=10, pady=10)
+
+    Hasil1 = Label(frame1, text="{:.2f}%".format(avgSimilarityMalware))
+    Hasil1.grid(padx=10, pady=10)
+
+    Hasil2 = Label(frame2, text="{:.2f}%".format(avgSimilarityNonMalware))
+    Hasil2.grid(padx=10, pady=10)
+
+    Hasil3 = Label(frame3, text=hasil)
+    Hasil3.grid(padx=10, pady=10)
+
+# def grayscaleBank(image):
+#     image = cv2.imread(image)
+#     window_name = 'Grayscale Image Malware'
+#     cv2.imshow(window_name, image)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows() 
+
+# def entropyBank(image):
+#     gambar = Image.open(image)
+#     array = list(gambar.getdata())
+#     listEntropi = []
+#     listHeight = []
+#     for i in range(gambar.height):
+#         baris = array[i * gambar.width:(i+1) * gambar.width]
+#         if baris!=0:
+#             entropi = hitungEntropi(baris)
+#             listEntropi.append(entropi)
+#             listHeight.append(i)
+
+#     plt.plot(listHeight,listEntropi,marker="+")
+#     plt.show()
+
+def grayscaleBank(file):
+    pathMalware = r'.\Malware'
+    file2 = os.path.join(pathMalware, file)
+
+    with open(file2, 'rb') as f:
+        data = f.read()
+
+    width = int(ceil(sqrt(len(data))))
+    height = int(ceil(sqrt(len(data))))
+    array_2d = [[0 for _ in range(width)] for _ in range(height)]
+
+    for i in range(height):
+        for j in range(width):
+            index = i * width + j
+            if index < len(data):
+                array_2d[i][j] = data[index]
+            else:
+                break
+
+    numpy_array_2d = np.array(array_2d, dtype=np.uint8)
+
+    cv2.imshow(file, numpy_array_2d)
     cv2.waitKey(0)
-    cv2.destroyAllWindows() 
+    cv2.destroyAllWindows()
 
-def entropyBank(image):
-    gambar = Image.open(image)
-    array = list(gambar.getdata())
+def entropyBank(file):
+    pathMalware = r'.\Malware'
+    file2 = os.path.join(pathMalware, file)
+    with open(file2, 'rb') as f:
+        data = f.read()
+
+    arrayBank = convertToGrayscale2(data)
+
     listEntropi = []
-    listHeight = []
-    for i in range(gambar.height):
-        baris = array[i * gambar.width:(i+1) * gambar.width]
-        if baris!=0:
-            entropi = hitungEntropi(baris)
-            listEntropi.append(entropi)
-            listHeight.append(i)
+    tempHeight = []
 
-    plt.plot(listHeight,listEntropi,marker="+")
+    for i in range(len(arrayBank)):
+        baris = arrayBank[i]
+        nilaiEntropi = hitungEntropi(baris)
+        listEntropi.append(nilaiEntropi)
+        tempHeight.append(i)
+
+    plt.plot(tempHeight, listEntropi, marker="+")
     plt.show()
-        
 
 def openBank():
     top = Toplevel()
-    top.geometry("525x400")
+    top.geometry("750x800")
     top.title("Bank Malware")
 
-    frameA = LabelFrame(top, text="Cryptowall", padx=10,pady=10)
-    frameA.grid(row=0,column=0,padx=10, pady=10)
-    btn_grayscaleA = Button(frameA, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameA.cget("text")+'.png'))
-    btn_grayscaleA.pack()
-    btn_entropyA = Button(frameA, text="Entropy Graph", command=lambda: entropyBank(frameA.cget("text")+'.png'))
-    btn_entropyA.pack()
+    pathMalware = r'.\Malware'
+    namaMalware = os.listdir(pathMalware)
 
-    frameB = LabelFrame(top, text="Mamba", padx=10,pady=10)
-    frameB.grid(row=0,column=1,padx=10, pady=10)
-    btn_grayscaleB = Button(frameB, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameB.cget("text")+'.png'))
-    btn_grayscaleB.pack()
-    btn_entropyB = Button(frameB, text="Entropy Graph", command=lambda: entropyBank(frameB.cget("text")+'.png'))
-    btn_entropyB.pack()
-
-    frameC = LabelFrame(top, text="RedBoot", padx=10,pady=10)
-    frameC.grid(row=0,column=2,padx=10, pady=10)
-    btn_grayscaleC = Button(frameC, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameC.cget("text")+'.png'))
-    btn_grayscaleC.pack()
-    btn_entropyC = Button(frameC, text="Entropy Graph", command=lambda: entropyBank(frameC.cget("text")+'.png'))
-    btn_entropyC.pack()
-
-    frameD = LabelFrame(top, text="Rex", padx=10,pady=10)
-    frameD.grid(row=1,column=0,padx=10, pady=10)
-    btn_grayscaleD = Button(frameD, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameD.cget("text")+'.png'))
-    btn_grayscaleD.pack()
-    btn_entropyD = Button(frameD, text="Entropy Graph", command=lambda: entropyBank(frameD.cget("text")+'.png'))
-    btn_entropyD.pack()
-
-    frameE = LabelFrame(top, text="WannaCry", padx=10,pady=10)
-    frameE.grid(row=1,column=1,padx=10, pady=10)
-    btn_grayscaleE = Button(frameE, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameE.cget("text")+'.png'))
-    btn_grayscaleE.pack()
-    btn_entropyE = Button(frameE, text="Entropy Graph", command=lambda: entropyBank(frameE.cget("text")+'.png'))
-    btn_entropyE.pack()
-
-    frameF = LabelFrame(top, text="WannaCryPlus", padx=10,pady=10)
-    frameF.grid(row=1,column=2,padx=10, pady=10)
-    btn_grayscaleF = Button(frameF, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameF.cget("text")+'.png'))
-    btn_grayscaleF.pack()
-    btn_entropyF = Button(frameF, text="Entropy Graph", command=lambda: entropyBank(frameF.cget("text")+'.png'))
-    btn_entropyF.pack()
-
-    frameG = LabelFrame(top, text="petya1", padx=10,pady=10)
-    frameG.grid(row=0,column=3,padx=10, pady=10)
-    btn_grayscaleG = Button(frameG, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameG.cget("text")+'.png'))
-    btn_grayscaleG.pack()
-    btn_entropyG = Button(frameG, text="Entropy Graph", command=lambda: entropyBank(frameG.cget("text")+'.png'))
-    btn_entropyG.pack()
-    
-    frameH = LabelFrame(top, text="petya2", padx=10,pady=10)
-    frameH.grid(row=1,column=3,padx=10, pady=10)
-    btn_grayscaleH = Button(frameH, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameH.cget("text")+'.png'))
-    btn_grayscaleH.pack()
-    btn_entropyH = Button(frameH, text="Entropy Graph", command=lambda: entropyBank(frameH.cget("text")+'.png'))
-    btn_entropyH.pack()
-
-    frameI = LabelFrame(top, text="vipasana1", padx=10,pady=10)
-    frameI.grid(row=2,column=0,padx=10, pady=10)
-    btn_grayscaleI = Button(frameI, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameI.cget("text")+'.png'))
-    btn_grayscaleI.pack()
-    btn_entropyI = Button(frameI, text="Entropy Graph", command=lambda: entropyBank(frameI.cget("text")+'.png'))
-    btn_entropyI.pack()
-
-    frameJ = LabelFrame(top, text="vipasana2", padx=10,pady=10)
-    frameJ.grid(row=2,column=1,padx=10, pady=10)
-    btn_grayscaleJ = Button(frameJ, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameJ.cget("text")+'.png'))
-    btn_grayscaleJ.pack()
-    btn_entropyJ = Button(frameJ, text="Entropy Graph", command=lambda: entropyBank(frameJ.cget("text")+'.png'))
-    btn_entropyJ.pack()
-
-    frameK = LabelFrame(top, text="vipasana3", padx=10,pady=10)
-    frameK.grid(row=2,column=2,padx=10, pady=10)
-    btn_grayscaleK = Button(frameK, text="Grayscale", padx= 13, command=lambda: grayscaleBank(frameK.cget("text")+'.png'))
-    btn_grayscaleK.pack()
-    btn_entropyK = Button(frameK, text="Entropy Graph", command=lambda: entropyBank(frameK.cget("text")+'.png'))
-    btn_entropyK.pack()
+    for idx, name in enumerate(namaMalware):
+        row, col = divmod(idx, 5)
+        frame = LabelFrame(top, text=name, padx=10, pady=10)
+        frame.grid(row=row, column=col, padx=10, pady=10)
+        btn_grayscale = Button(frame, text="Grayscale", padx=13, command=lambda n=name: grayscaleBank(n))
+        btn_grayscale.pack()
+        btn_entropy = Button(frame, text="Entropy Graph", command=lambda n=name: entropyBank(n))
+        btn_entropy.pack()
 
 #==========================================================
 

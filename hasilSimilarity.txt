@@ -1,0 +1,62 @@
+--- Similarity dengan File Malware ---
+File: .\Malware\cerber.exe, Similarity: 53.88%
+File: .\Malware\Cryptolocker(1).exe, Similarity: 57.86%
+File: .\Malware\Cryptolocker(2).exe, Similarity: 71.49%
+File: .\Malware\Cryptolocker(3a).exe, Similarity: 55.02%
+File: .\Malware\Cryptolocker(3b).exe, Similarity: 54.78%
+File: .\Malware\cryptowall.bin, Similarity: 48.94%
+File: .\Malware\ImplantBigBang.bin, Similarity: 74.06%
+File: .\Malware\jigsaw, Similarity: 55.58%
+File: .\Malware\Petrwrap4.exe, Similarity: 58.45%
+File: .\Malware\Ransom.Xdata.exe, Similarity: 52.81%
+File: .\Malware\RedDelta2, Similarity: 69.33%
+File: .\Malware\RedDelta3, Similarity: 49.74%
+File: .\Malware\Reveton.cpp, Similarity: 38.42%
+File: .\Malware\Shamoon, Similarity: 74.03%
+File: .\Malware\Shamoon (2), Similarity: 73.69%
+File: .\Malware\TheBigBang.bin, Similarity: 80.83%
+File: .\Malware\TheBigBangImplant.bin, Similarity: 71.66%
+File: .\Malware\TrojanBechiro.exe, Similarity: 50.44%
+File: .\Malware\TrojanDropper.exe, Similarity: 84.98%
+File: .\Malware\TrojanKovter.exe, Similarity: 60.63%
+File: .\Malware\TrojanShylock, Similarity: 56.50%
+File: .\Malware\Turla(3).dll, Similarity: 51.09%
+File: .\Malware\Turla(4).dll, Similarity: 60.22%
+File: .\Malware\Turla(6).dll, Similarity: 38.88%
+File: .\Malware\wannaCry.exe, Similarity: 98.41%
+File: .\Malware\WannaCryPlus.exe, Similarity: 78.42%
+File: .\Malware\Win32.AgentTesla.exe, Similarity: 60.65%
+File: .\Malware\Win32.Unnamed_SpecMelt, Similarity: 81.50%
+File: .\Malware\Win32.ValeforBeta, Similarity: 72.10%
+File: .\Malware\ZeroAccess(1).exe_, Similarity: 48.48%
+--- Similarity dengan File Non Malware ---
+File: .\Non Malware\Ad-Aware Web Companion.exe, Similarity: 63.69%
+File: .\Non Malware\Battle.net.exe, Similarity: 75.12%
+File: .\Non Malware\cmd.exe, Similarity: 55.34%
+File: .\Non Malware\Core Temp.exe, Similarity: 74.41%
+File: .\Non Malware\dxdiag.exe, Similarity: 54.95%
+File: .\Non Malware\EasyAntiCheat.exe, Similarity: 69.85%
+File: .\Non Malware\eclipse.exe, Similarity: 59.69%
+File: .\Non Malware\GitHubDesktop.exe, Similarity: 54.31%
+File: .\Non Malware\Hades.exe, Similarity: 52.20%
+File: .\Non Malware\JumpKing.exe, Similarity: 59.07%
+File: .\Non Malware\linguist.exe, Similarity: 78.13%
+File: .\Non Malware\LMIGuardianSvc.exe, Similarity: 57.82%
+File: .\Non Malware\MSIAfterburner.exe, Similarity: 69.73%
+File: .\Non Malware\netbeans64.exe, Similarity: 54.63%
+File: .\Non Malware\notepad.exe, Similarity: 51.57%
+File: .\Non Malware\oriwotw.exe, Similarity: 66.71%
+File: .\Non Malware\parsecd.exe, Similarity: 57.04%
+File: .\Non Malware\progressReport.pdf, Similarity: 74.63%
+File: .\Non Malware\Razer Synapse Service.exe, Similarity: 53.22%
+File: .\Non Malware\rdpclip.exe, Similarity: 61.83%
+File: .\Non Malware\rdpshell.exe, Similarity: 63.72%
+File: .\Non Malware\recdisc.exe, Similarity: 47.28%
+File: .\Non Malware\RecoveryDrive.exe, Similarity: 71.69%
+File: .\Non Malware\refsutil.exe, Similarity: 75.19%
+File: .\Non Malware\rstrui.exe, Similarity: 54.91%
+File: .\Non Malware\Tunic.exe, Similarity: 58.93%
+File: .\Non Malware\vlc.exe, Similarity: 73.73%
+File: .\Non Malware\WebCompanionInstaller.exe, Similarity: 60.60%
+File: .\Non Malware\zerotierone.exe, Similarity: 71.76%
+File: .\Non Malware\Zoom.exe, Similarity: 51.63%
