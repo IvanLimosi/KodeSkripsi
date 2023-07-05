@@ -249,7 +249,7 @@ def entropyBank(file):
 
 def openBank():
     top = Toplevel()
-    top.geometry("750x800")
+    top.geometry("780x800")
     top.title("Bank Malware")
 
     pathMalware = r'.\Malware'
