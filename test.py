@@ -202,28 +202,6 @@ def lihatHasil():
     Hasil3 = Label(frame3, text=hasil)
     Hasil3.grid(padx=10, pady=10)
 
-# def grayscaleBank(image):
-#     image = cv2.imread(image)
-#     window_name = 'Grayscale Image Malware'
-#     cv2.imshow(window_name, image)
-#     cv2.waitKey(0)
-#     cv2.destroyAllWindows() 
-
-# def entropyBank(image):
-#     gambar = Image.open(image)
-#     array = list(gambar.getdata())
-#     listEntropi = []
-#     listHeight = []
-#     for i in range(gambar.height):
-#         baris = array[i * gambar.width:(i+1) * gambar.width]
-#         if baris!=0:
-#             entropi = hitungEntropi(baris)
-#             listEntropi.append(entropi)
-#             listHeight.append(i)
-
-#     plt.plot(listHeight,listEntropi,marker="+")
-#     plt.show()
-
 def grayscaleBank(file):
     pathMalware = r'.\Malware'
     file2 = os.path.join(pathMalware, file)
